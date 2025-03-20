@@ -4,11 +4,11 @@ import { UIScene } from './scenes/UIScene.js';
 
 const config = {
     type: Phaser.AUTO,
-    title: 'Overlord Rising',
+    title: 'Netto Game',
     description: '',
     parent: 'game-container',
-    width: 1280,
-    height: 720,
+    width: 1920,
+    height: 1090,
     backgroundColor: '#000000',
     pixelArt: false,
     scene: [

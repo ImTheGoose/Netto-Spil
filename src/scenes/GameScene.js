@@ -14,6 +14,19 @@ export class GameScene extends Phaser.Scene {
     create() {
         // your code here
         this.registry.set('money', 0)
+
+        this.graphics = this.add.graphics();
+        this.testBuyButton = new Phaser.Geom.Rectangle(200, 200, 300, 150);
+        this.graphics.fillStyle(0xffffff, 1.0);
+        this.graphics.fillRectShape(this.testBuyButton)
+
+        this.testBuyButton.setInteractive();
+
+    }
+
+    addBoxTest(){
+        var testBox = new Phaser.Geom.Rectangle(Phaser.Math.Between(0,1000), Phaser.Math.Between(0,1000), Phaser.Math.Between(30,300), Phaser.Math.Between(20,200));
+        this.graphics.fillRectShape(testBox)
     }
 
     update(time, delta) {
