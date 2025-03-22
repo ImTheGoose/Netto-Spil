@@ -3,12 +3,12 @@ import { GameScene } from './scenes/GameScene.js';
 import { UIScene } from './scenes/UIScene.js';
 
 const config = {
-    type: Phaser.AUTO,
+    type: Phaser.WEBGL,
     title: 'Overlord Rising',
     description: '',
     parent: 'game-container',
-    width: 1280,
-    height: 720,
+    width: 3840,
+    height: 2160,
     backgroundColor: '#000000',
     pixelArt: false,
     scene: [

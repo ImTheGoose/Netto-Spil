@@ -3,9 +3,23 @@ export class UIScene extends Phaser.Scene{
         super({ key: "UIScene", active: true })
     }
 
+    preload(){
+        this.load.font('KodeMonoRegular','assets/KodeMono-Regular.ttf')
+        this.load.font('KodeMonoMedium','assets/KodeMono-Medium.ttf')
+        this.load.font('KodeMonoSemiBold','assets/KodeMono-SemiBold.ttf')
+        this.load.font('KodeMonoBold','assets/KodeMono-Bold.ttf')
+    }
 
     create(){
-        this.moneyText = this.add.text(0, 0, 'Money: 0');
+        const scaleFactor = this.scale.width / 50
+
+        this.moneyText = this.add.text(0, 0, 'Money: 0',{
+            fontSize: `${scaleFactor}px`, 
+            fill: '#239f22', 
+            fontFamily: 'KodeMonoBold',
+        });
+
+        
     }
 
     update(time, delta) {
