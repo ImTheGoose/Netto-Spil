@@ -18,6 +18,9 @@ export class GameScene extends Phaser.Scene {
         this.load.image('nettoSprite', 'assets/UI/nettoSprite.png')
         this.load.image('nettoSpriteGray', 'assets/UI/nettoSpriteGray.png')
 
+        this.load.image('button','assets/UI/button.png')
+        this.load.image('greyButton','assets/UI/greyButton.png')
+
         this.load.image('customerIcon', 'assets/UI/customerIcon.png')
     }
     
@@ -35,7 +38,7 @@ export class GameScene extends Phaser.Scene {
         this.nettoList.push(this.createNetto(x/1.5*0.9,y/4,150))
 
 
-        this.buttonList.push(this.createButton(x/2*0.9, y/1.5, "Test Button",'customerIcon',() => {
+        this.buttonList.push(this.createButton(x/2*0.9, y/1.5, "100.000kr",'customerIcon',() => {
             if (this.nettoList[0].cooldown >= 1000){
                 this.nettoList[0].cooldown -= 500;
             }else{
@@ -70,28 +73,67 @@ export class GameScene extends Phaser.Scene {
     }
 
     //Creates a new button with text label, and returns the button & text objects as an object.
-    createButton(x,y,name,icon,buttonCallback) {
-        const scaleFactor = this.scale.width / 50
+    createButton(x,y,depricated,icon,buttonCallback) {
         const buttonPrice = 50;
+        const buttonValue = '1.72x';
         const sX = this.scale.width/1920
         const sY = this.scale.height/1080
+        const accentOffset = sY*15;
+        const priceOffset = sY*60;
+        const valueOffset = sY*40
+        const fitTextPadding = sX*20
+
+
+        var accentButton = this.add.image(x,y+accentOffset,'button')
+        accentButton.setScale(sX*0.95)
+        accentButton.setAlpha(0.7)
 
         //Button creation and formatting
-        var button = this.add.image(x,y,'testB').setInteractive()
+        var button = this.add.image(x,y,'button').setInteractive()
+        button.setScale(sX*0.95)
 
-        button.setScale(this.scale.width/4000*3)
-
-        const dW = button.displayWidth;
-        const dH = button.displayHeight;
-
-        var icon = this.add.image(x,y-dH/3.3,icon)
-        
-        //Text creation and formatting
-        var buttonText = this.add.text(x,y,name,{
-            fontSize: `${scaleFactor}px`, 
-            fill: '#fff', 
+        var buttonValueText = this.add.text(x,y-valueOffset,buttonValue,{
+            fontSize: `${sX*50}px`, 
+            fill: '#000', 
             fontFamily: 'KodeMonoBold'
         }).setOrigin(0.5,0.5)
+        
+        const xOffset = buttonValueText.displayWidth/3
+        buttonValueText.x = x+xOffset
+
+        var icon = this.add.image(x-xOffset*2,y-valueOffset,icon).setScale(sX/1.4)
+
+        //Text creation and formatting
+        var buttonPriceText = this.add.text(x,y+priceOffset,buttonPrice+"Kr",{
+            fontSize: `${sX*50}px`, 
+            fill: '#000', 
+            fontFamily: 'KodeMonoBold'
+        }).setOrigin(0.5,0.5)
+        fitText(buttonPriceText, button.displayWidth)
+
+        //Adjust font size to fit within a maxWidth
+        function fitText(textObject, maxWidth){
+            while (textObject.displayWidth > maxWidth-fitTextPadding) {
+                let currentSize = parseInt(textObject.style.fontSize, 10);
+                textObject.setFontSize(currentSize - 1);
+            }
+        }
+
+        //Resets position of all button contents
+        function resetButtonPosition(){
+            button.y = y
+            buttonPriceText.y = y+priceOffset
+            icon.y = y-valueOffset
+            buttonValueText.y = y-valueOffset
+        }
+
+        //Adds offset to all button contents
+        function offsetButtonPosition(){
+            button.y += accentOffset
+            buttonPriceText.y += accentOffset
+            icon.y += accentOffset
+            buttonValueText.y += accentOffset
+        }
 
 
         //Following are pointer events
@@ -99,22 +141,25 @@ export class GameScene extends Phaser.Scene {
         button.on('pointerover', () => {
             if (this.money > buttonPrice){
                 button.setTint(0xb4b4b4)
+                accentButton.setTint(0xb4b4b4)
             }
 
         } )
         //On Hover Leave
         button.on('pointerout',() => {
             button.clearTint()
+            accentButton.clearTint()
         })
         //On button press
         button.on('pointerdown', () => {
-            button.setTexture('testBDown')
             button.setTint(0x767676)
+            accentButton.setTint(0x767676)
+            offsetButtonPosition();
         })
         //On button release
         button.on('pointerup', () => {
             if (this.money >= buttonPrice){
-                button.setTexture('testB')
+                button.setTexture('button')
                 console.log("button clicked")
                 this.money -= buttonPrice;
                 buttonCallback();
@@ -122,12 +167,16 @@ export class GameScene extends Phaser.Scene {
             }else{
                 console.log("ikke nok penge")
             }
+            resetButtonPosition()
         })
 
 
         return {
             button: button,
-            buttonText: buttonText,
+            accentButton: accentButton,
+            buttonPriceText: buttonPriceText,
+            buttonValueText: buttonValueText,
+            buttonIcon: icon,
             buttonPrice: buttonPrice,
             buttonCallback: buttonCallback
         }
@@ -146,10 +195,13 @@ export class GameScene extends Phaser.Scene {
         //Checking if a button should be gray
         this.buttonList.forEach(button => {
             if(this.money < button.buttonPrice ){
-                button.button.setTexture('testBLocked')
+                button.button.setTexture('greyButton')
                 button.button.clearTint()
-            }else if (button.button.texture.key === 'testBLocked'){
-                button.button.setTexture('testB')
+                button.accentButton.setTexture('greyButton')
+                button.accentButton.clearTint()
+            }else if (button.button.texture.key === 'greyButton'){
+                button.button.setTexture('button')
+                button.accentButton.setTexture('button')
             }
         });
 

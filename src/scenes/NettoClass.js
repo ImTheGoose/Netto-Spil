@@ -4,7 +4,7 @@ export class NettoClass {
         this.grayImage = imageGray;
 
         this.cooldownProgress = 0;
-        this.cooldown = 5000;
+        this.cooldown = 2500;
         this.collectMoney = 100;
     }
 }
