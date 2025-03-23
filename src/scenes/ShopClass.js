@@ -15,6 +15,7 @@ export class Shop {
         this.y = y
         this.size = size
         this.texture = texture
+        this.pointerOn = false;
 
         this.cooldown = 2500
         this.cooldownProgress = 0
@@ -26,11 +27,24 @@ export class Shop {
         this.greySprite = gameScene.add.image(x, y, texture.grey).setDisplaySize(sX*size, sY*size)
         this.progressSprite = gameScene.add.image(x, y, texture.progress).setDisplaySize(sX*size, sY*size).setInteractive();
 
+        this.progressSprite.on('pointerover',()=>{
+            if (this.cooldownProgress >= this.cooldown){
+                gameScene.input.setDefaultCursor('pointer');
+            }
+            this.pointerOn = true
+        })
+
+        this.progressSprite.on('pointerout',()=>{
+            gameScene.input.setDefaultCursor('auto');
+            this.pointerOn = false
+        })
+
         this.progressSprite.on('pointerdown', () =>{
             if(this.cooldownProgress >= this.cooldown){
                 this.cooldownProgress = 0;
                 console.log("Indsamlede "+this.collectMoney+"kr fra nettoen")
                 gameScene.money += this.collectMoney
+                gameScene.input.setDefaultCursor('auto');
             }
         })
     }

@@ -35,13 +35,16 @@ export class Button{
             if (this.gameScene.money >= this.price){
                 this.button.setTint(0xb4b4b4)
                 this.accentButton.setTint(0xb4b4b4)
+                gameScene.input.setDefaultCursor('pointer');
             }
+            
 
         } )
         //On Hover Leave
         this.button.on('pointerout',() => {
             this.button.clearTint()
             this.accentButton.clearTint()
+            gameScene.input.setDefaultCursor('auto');
         })
         //On button press
         this.button.on('pointerdown', () => {
@@ -102,6 +105,20 @@ export class Button{
             textObject.setFontSize(currentSize - 1);
         }
     }
+
+    //Toggle visibility of button
+    toggleButton(active){
+        if (active){
+            this.button.setVisible(true)
+            this.button.setInteractive()
+            this.accentButton.setVisible(true)
+        }else{
+            this.button.setVisible(false)
+            this.button.removeInteractive()
+            this.accentButton.setVisible(true)
+        }
+
+    }
 }
 
 export class shopButton extends Button{
@@ -153,6 +170,20 @@ export class shopButton extends Button{
         this.buttonPriceText.y += this.accentOffset
         this.icon.y += this.accentOffset
         this.buttonValueText.y += this.accentOffset
+    }
+
+    //Toggles visibility of button and contents
+    toggleButton(active){
+        super.toggleButton(active)
+        if (active){
+            this.icon.setVisible(true)
+            this.buttonPriceText.setVisible(true)
+            this.buttonValueText.setVisible(true)
+        }else{
+            this.icon.setVisible(false)
+            this.buttonPriceText.setVisible(false)
+            this.buttonValueText.setVisible(false)
+        }
     }
 
 }

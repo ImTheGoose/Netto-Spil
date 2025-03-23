@@ -1,5 +1,6 @@
 import { shopButton, Button } from './ButtonClasses.js';
 import  { Shop } from './ShopClass.js';
+import { shopMenu,marketingMenu,managerMenu,worldMenu } from "./MenuClass.js";
 
 export class GameScene extends Phaser.Scene {
     constructor(){
@@ -13,6 +14,18 @@ export class GameScene extends Phaser.Scene {
     }
 
     preload() {
+        //General Menu Assets
+        this.load.image('menuBackground', 'assets/UI/menuBackdrop.png')
+        this.load.image('inactiveMenuTab', 'assets/UI/inactiveMenuTab.png')
+        this.load.image('activeMenuTab', 'assets/UI/activeMenuTab.png')
+
+        //Menu Icons
+        this.load.image('shopIcon', 'assets/UI/shopIcon.png')
+        this.load.image('marketingIcon','assets/UI/marketingIcon.png')
+        this.load.image('managerIcon','assets/UI/managerIcon.png')
+        this.load.image('worldIcon','assets/UI/worldIcon.png')
+
+        //Map, Buttons and shops assets
         this.load.image('map', 'assets/DK-Kort.png');
         this.load.image('testB', 'assets/UI/testButton.png');
         this.load.image('testBDown', 'assets/UI/testButtonDown.png');
@@ -39,13 +52,16 @@ export class GameScene extends Phaser.Scene {
     create() {
         const x = this.scale.width
         const y = this.scale.height
+        const sX = x/1920
+        const sY = y/1080
 
         const scaleFactor = x / 50
 
         // Loader mappet
-        const map = this.add.image(x/2*0.9, y/2, 'map');
+        const map = this.add.image(x/2*0.8, y/2, 'map');
         map.setScale(x/4000*1.2);
 
+        //--- Test button and shops start ---//
         //Adding shops to list of shops
         this.shopList.push(new Shop(
             this,
@@ -88,6 +104,24 @@ export class GameScene extends Phaser.Scene {
             valueIncrement: 0,
             callBack: () => { return null; }
         },this.texture.shopButton))
+        //--- Test button and shops END ---//
+
+
+        //--- Menu segment start ---//
+        //Adds the background image.
+        this.backgroundImage = this.add.image(this.scale.width,0,'menuBackground').setDisplaySize(sX*550,this.scale.height)
+        this.backgroundImage.setOrigin(1,0)
+        
+        const menuWidth = this.backgroundImage.displayWidth
+        const iconSize = menuWidth/4;
+
+        this.shopMenu = new shopMenu(this,menuWidth,iconSize)
+        this.marketingMenu = new marketingMenu(this,menuWidth,iconSize)
+        this.managerMenu = new managerMenu(this,menuWidth,iconSize)
+        this.worldMenu = new worldMenu(this,menuWidth,iconSize)
+
+        this.activeMenu = this.shopMenu 
+        //--- Menu segment end ---//
 
         this.registry.set('money', 0)
     }
@@ -98,6 +132,8 @@ export class GameScene extends Phaser.Scene {
         this.shopList.forEach(shop => {
             if (shop.cooldownProgress < shop.cooldown){
                 shop.cooldownProgress += delta;
+            }else if (shop.pointerOn){
+                this.input.setDefaultCursor('pointer');
             }
             const cropHeight = 1080 * shop.cooldownProgress/shop.cooldown;
             shop.progressSprite.setCrop(0,1080-cropHeight,1080,cropHeight)
