@@ -27,6 +27,8 @@ export class Shop {
         this.greySprite = gameScene.add.image(x, y, texture.grey).setDisplaySize(sX*size, sY*size)
         this.progressSprite = gameScene.add.image(x, y, texture.progress).setDisplaySize(sX*size, sY*size).setInteractive();
 
+        gameScene.events.emit('shopCreated', this)
+
         this.progressSprite.on('pointerover',()=>{
             if (this.cooldownProgress >= this.cooldown){
                 gameScene.input.setDefaultCursor('pointer');

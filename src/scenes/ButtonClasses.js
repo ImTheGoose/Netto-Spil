@@ -11,10 +11,11 @@ export class Button{
         this.priceIncrement = config.priceIncrement
         this.valueIncrement = config.valueIncrement
         this.callBack = config.callBack
+        this.scale = config.scale
 
         //Makes shorthands and quick adjustments
-        const sX = gameScene.scale.width/1920
-        const sY = gameScene.scale.height/1080
+        const sX = gameScene.scale.width/1920*this.scale
+        const sY = gameScene.scale.height/1080*this.scale
         const x = this.x
         const y = this.y
         this.accentOffset = sY*15;
@@ -106,6 +107,21 @@ export class Button{
         }
     }
 
+    //Function to update position of button.
+    updatePosition(x,y){
+        if (y){
+            this.accentButton.y = y+this.accentOffset
+            this.button.y = y
+            this.y = y
+        }
+
+        if (x){
+            this.accentButton.x = x
+            this.button.x = x
+            this.x = x
+        }
+    }
+
     //Toggle visibility of button
     toggleButton(active){
         if (active){
@@ -115,7 +131,7 @@ export class Button{
         }else{
             this.button.setVisible(false)
             this.button.removeInteractive()
-            this.accentButton.setVisible(true)
+            this.accentButton.setVisible(false)
         }
 
     }
@@ -124,8 +140,8 @@ export class Button{
 export class shopButton extends Button{
     constructor(gameScene, config,icon){
         super(gameScene,config,gameScene.texture.shopButton)
-        const sX = gameScene.scale.width/1920
-        const sY = gameScene.scale.height/1080
+        const sX = gameScene.scale.width/1920*this.scale
+        const sY = gameScene.scale.height/1080*this.scale
         const x = this.x
         const y = this.y
 
@@ -140,11 +156,11 @@ export class shopButton extends Button{
         }).setOrigin(0.5,0.5)
 
         //calculates an offsten from value and icon
-        const xOffset = this.buttonValueText.displayWidth/3
-        this.buttonValueText.x = x+xOffset
+        this.xOffset = this.buttonValueText.displayWidth/3
+        this.buttonValueText.x = x+this.xOffset
 
         //Creates icon element
-        this.icon = gameScene.add.image(x-xOffset*2,y-this.valueOffset,icon).setScale(sX/1.4)
+        this.icon = gameScene.add.image(x-this.xOffset*2,y-this.valueOffset,icon).setScale(sX/1.4)
 
         //Creates price element for button.
         this.buttonPriceText = gameScene.add.text(x,y+this.priceOffset,this.price+"Kr",{
@@ -162,6 +178,21 @@ export class shopButton extends Button{
         this.icon.y = this.y-this.valueOffset
         this.buttonValueText.y = this.y-this.valueOffset
 
+    }
+
+    //Repositions button and contents
+    updatePosition(x,y){
+        super.updatePosition(x,y)
+        if (y){
+            this.buttonValueText.y = y-this.valueOffset
+            this.icon.y = y-this.valueOffset
+            this.buttonPriceText.y = y+this.priceOffset
+        }
+        if (x){
+            this.buttonValueText.x = x+this.xOffset
+            this.icon.x = x-this.xOffset*2
+            this.buttonPriceText.x = x
+        }
     }
 
     //Offsets position of button and contents
@@ -185,5 +216,72 @@ export class shopButton extends Button{
             this.buttonValueText.setVisible(false)
         }
     }
+}
 
+export class addButton extends Button{
+    constructor(gameScene, config,title){
+        super(gameScene,config,gameScene.texture.addButton)
+        const sX = gameScene.scale.width/1920*this.scale
+        const sY = gameScene.scale.height/1080*this.scale
+        const x = this.x
+        const y = this.y
+
+        this.priceOffset = sY*30;
+        this.titleOffset = sY*20
+        
+        //Adds the text element to show current value
+        this.buttonTitleText = gameScene.add.text(x,y-this.titleOffset,title,{
+            fontSize: `${sX*50}px`, 
+            fill: '#fff', 
+            fontFamily: 'KodeMonoBold'
+        }).setOrigin(0.5,0.5)
+
+        //Creates price element for button.
+        this.buttonPriceText = gameScene.add.text(x,y+this.priceOffset,this.price+"Kr",{
+            fontSize: `${sX*50}px`, 
+            fill: '#fff', 
+            fontFamily: 'KodeMonoBold'
+        }).setOrigin(0.5,0.5)
+        this.fitText(this.buttonPriceText, this.button.displayWidth)
+    }
+
+    //Resets position of button and contents
+    resetButtonPosition(){
+        super.resetButtonPosition()
+        this.buttonPriceText.y = this.y+this.priceOffset
+        this.buttonTitleText.y = this.y-this.titleOffset
+
+    }
+
+    //Repositions button and contents
+    updatePosition(x,y){
+        super.updatePosition(x,y)
+        if (y){
+            this.buttonTitleText.y = y-this.titleOffset
+            this.buttonPriceText.y = y+this.priceOffset
+        }
+        if (x){
+            this.buttonTitleText.x = x
+            this.buttonPriceText.x = x
+        }
+    }
+
+    //Offsets position of button and contents
+    offsetButtonPosition(){
+        super.offsetButtonPosition()
+        this.buttonPriceText.y += this.accentOffset
+        this.buttonTitleText.y += this.accentOffset
+    }
+
+    //Toggles visibility of button and contents
+    toggleButton(active){
+        super.toggleButton(active)
+        if (active){
+            this.buttonPriceText.setVisible(true)
+            this.buttonTitleText.setVisible(true)
+        }else{
+            this.buttonPriceText.setVisible(false)
+            this.buttonTitleText.setVisible(false)
+        }
+    }
 }
