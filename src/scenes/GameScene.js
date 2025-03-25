@@ -4,7 +4,7 @@ import { shopMenu,marketingMenu,managerMenu,worldMenu } from "./MenuClass.js";
 
 export class GameScene extends Phaser.Scene {
     constructor(){
-        super({ key: "GameScene", active: true })
+        super({ key: "GameScene", active: false })
 
         this.money = 0;
 
@@ -14,6 +14,12 @@ export class GameScene extends Phaser.Scene {
     }
 
     preload() {
+        const config = this.cache.json.get('config')
+        config.assets.forEach((asset) =>{
+            this.load.image(asset.name,asset.path)
+        })
+
+        /*
         //General Menu Assets
         this.load.image('menuBackground', 'assets/UI/menuBackdrop.png')
         this.load.image('inactiveMenuTab', 'assets/UI/inactiveMenuTab.png')
@@ -39,6 +45,7 @@ export class GameScene extends Phaser.Scene {
         this.load.image('addButtonGrey', 'assets/UI/addButtonGrey.png')
 
         this.load.image('customerIcon', 'assets/UI/customerIcon.png')
+        */
         this.texture = {
             shopButton:{
                 button: 'button',

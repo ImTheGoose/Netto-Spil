@@ -1,0 +1,46 @@
+assets:
+  # General Menu Assets
+  - name: "menuBackground"
+    path: "assets/UI/menuBackdrop.png"
+  - name: "inactiveMenuTab"
+    path: "assets/UI/inactiveMenuTab.png"
+  - name: "activeMenuTab"
+    path: "assets/UI/activeMenuTab.png"
+  
+  # Menu Icons
+  - name: "shopIcon"
+    path: "assets/UI/shopIcon.png"
+  - name: "marketingIcon"
+    path: "assets/UI/marketingIcon.png"
+  - name: "managerIcon"
+    path: "assets/UI/managerIcon.png"
+  - name: "worldIcon"
+    path: "assets/UI/worldIcon.png"
+  
+  # Map, Buttons and Shops Assets
+  - name: "map"
+    path: "assets/DK-Kort.png"
+  - name: "testB"
+    path: "assets/UI/testButton.png"
+  - name: "testBDown"
+    path: "assets/UI/testButtonDown.png"
+  - name: "testBLocked"
+    path: "assets/UI/testButtonLocked.png"
+  - name: "nettoSprite"
+    path: "assets/UI/nettoSprite.png"
+  - name: "nettoSpriteGrey"
+    path: "assets/UI/nettoSpriteGray.png"
+  
+  # Buttons and Additional Assets
+  - name: "button"
+    path: "assets/UI/button.png"
+  - name: "greyButton"
+    path: "assets/UI/greyButton.png"
+  - name: "addButton"
+    path: "assets/UI/addButton.png"
+  - name: "addButtonGrey"
+    path: "assets/UI/addButtonGrey.png"
+  
+  # Customer Icon
+  - name: "customerIcon"
+    path: "assets/UI/customerIcon.png"
