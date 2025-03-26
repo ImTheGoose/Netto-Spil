@@ -1,3 +1,42 @@
+shopConfig:
+  - name: "København"
+    x: 0
+    y: 0
+    price: 0
+    texture:
+      grey: 'nettoSpriteGrey'
+      progress: 'nettoSprite'
+    menuButtons:
+      upgrade:
+
+      - icon: 'customerIcon'
+        startPrice: 100
+        priceMultiplier: 1.2
+        defaultValue: 0
+        maxValue: 50
+        valueIncrement: 5
+        scale: 0.5
+
+
+      - icon: 'customerIcon'
+        startPrice: 100
+        priceMultiplier: 1.2
+        defaultValue: 0
+        maxValue: 50
+        valueIncrement: 5
+        scale: 0.5
+
+
+      - icon: 'customerIcon'
+        startPrice: 100
+        priceMultiplier: 1.2
+        defaultValue: 0
+        maxValue: 50
+        valueIncrement: 5
+        scale: 0.5
+        
+    
+#Assets are looped in the GameScene and loaded from there.
 assets:
   # General Menu Assets
   - name: "menuBackground"

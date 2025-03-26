@@ -141,11 +141,6 @@ export class GameScene extends Phaser.Scene {
         this.registry.set('money', 0)
     }
 
-    //Function to loop through all buttons in a list and lock them.
-    lockButtonList(list){
-        list
-    }
-
     update(time, delta) {
         //Updates the progress of each shop
         this.shopList.forEach(shop => {
