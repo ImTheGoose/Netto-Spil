@@ -19,13 +19,14 @@ export class Shop {
 
         this.cooldown = 2500
         this.cooldownProgress = 0
-        this.collectMoney = 100;
+        this.collectMoney = 2000;
 
-        const sX = gameScene.scale.width/1920
-        const sY = gameScene.scale.height/1080
+        const sF = gameScene.scale.width/1920
+         
+         
 
-        this.greySprite = gameScene.add.image(x, y, texture.grey).setDisplaySize(sX*size, sY*size)
-        this.progressSprite = gameScene.add.image(x, y, texture.progress).setDisplaySize(sX*size, sY*size).setInteractive();
+        this.greySprite = gameScene.add.image(x, y, texture.grey).setDisplaySize( sF*size,  sF*size)
+        this.progressSprite = gameScene.add.image(x, y, texture.progress).setDisplaySize( sF*size,  sF*size).setInteractive();
 
         gameScene.events.emit('shopCreated', this)
 

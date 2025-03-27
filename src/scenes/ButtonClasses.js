@@ -8,27 +8,25 @@ export class Button{
         this.texture = texture;
         this.price = config.price
         this.value = config.value
-        this.priceIncrement = config.priceIncrement
+        this.priceMultiplier = config.priceMultiplier
         this.valueIncrement = config.valueIncrement
         this.callBack = config.callBack
         this.scale = config.scale
 
         //Makes shorthands and quick adjustments
-        const sX = gameScene.scale.width/1920*this.scale
-        const sY = gameScene.scale.height/1080*this.scale
-        const x = this.x
-        const y = this.y
-        this.accentOffset = sY*15;
-        this.fitTextPadding = sX*20
+        const sF = gameScene.scale.width/1920*this.scale
+
+        this.accentOffset = sF*15;
+        this.fitTextPadding = sF*20
 
         //adds accent piece to button
-        this.accentButton = gameScene.add.image(x,y+this.accentOffset,this.texture.button)
-        this.accentButton.setScale(sX*0.95)
+        this.accentButton = gameScene.add.image(this.x,this.y+this.accentOffset,this.texture.button)
+        this.accentButton.setScale(sF*0.95)
         this.accentButton.setAlpha(0.7)
 
         //Button creation and formatting
-        this.button = gameScene.add.image(x,y,this.texture.button).setInteractive()
-        this.button.setScale(sX*0.95)
+        this.button = gameScene.add.image(this.x,this.y,this.texture.button).setInteractive()
+        this.button.setScale(sF*0.95)
 
         //Following are pointer events
         //On Hover
@@ -38,26 +36,31 @@ export class Button{
                 this.accentButton.setTint(0xb4b4b4)
                 gameScene.input.setDefaultCursor('pointer');
             }
-            
-
         } )
+
         //On Hover Leave
         this.button.on('pointerout',() => {
             this.button.clearTint()
             this.accentButton.clearTint()
             gameScene.input.setDefaultCursor('auto');
         })
+
         //On button press
         this.button.on('pointerdown', () => {
             this.button.setTint(0x767676)
             this.accentButton.setTint(0x767676)
             this.offsetButtonPosition();
         })
+
         //On button release
         this.button.on('pointerup', () => {
             if (this.buttonRequirements()){
                 console.log("button clicked")
                 this.gameScene.money -= this.price;
+                this.price = Math.round(this.priceMultiplier*this.price)
+                
+                this.value = Math.round((this.value+this.valueIncrement) * 100) / 100;
+                this.updateText()
                 this.callBack();
                 this.button.setTint(0xb4b4b4)
             }else{
@@ -67,12 +70,15 @@ export class Button{
         })
     }
 
+    updateText(){
+        return;
+    }
+
     //Default requirement for button press.
     buttonRequirements(){
         if (this.gameScene.money >= this.price){
             return true;
         }
-
         return false;
     }
 
@@ -139,32 +145,32 @@ export class Button{
 
 export class shopButton extends Button{
     constructor(gameScene, config,icon){
-        super(gameScene,config,gameScene.texture.shopButton)
-        const sX = gameScene.scale.width/1920*this.scale
-        const sY = gameScene.scale.height/1080*this.scale
-        const x = this.x
-        const y = this.y
+        super(gameScene,config,gameScene.config.texture.shopButton)
+        const sF = gameScene.scale.width/1920*this.scale
 
-        this.priceOffset = sY*60;
-        this.valueOffset = sY*40
+        this.priceOffset = sF*60;
+        this.valueOffset = sF*40
         
         //Adds the text element to show current value
-        this.buttonValueText = gameScene.add.text(x,y-this.valueOffset,this.value,{
-            fontSize: `${sX*50}px`, 
+        this.buttonValueText = gameScene.add.text(this.x,this.y-this.valueOffset,this.value,{
+            fontSize: `${sF*50}px`, 
             fill: '#000', 
             fontFamily: 'KodeMonoBold'
         }).setOrigin(0.5,0.5)
 
-        //calculates an offsten from value and icon
-        this.xOffset = this.buttonValueText.displayWidth/3
-        this.buttonValueText.x = x+this.xOffset
-
         //Creates icon element
-        this.icon = gameScene.add.image(x-this.xOffset*2,y-this.valueOffset,icon).setScale(sX/1.4)
+        this.icon = gameScene.add.image(0,this.y-this.valueOffset,icon).setScale(sF/1.4)
+
+        //calculates an offsten from value and icon
+        this.xOffset = (this.buttonValueText.displayWidth+this.icon.displayWidth)/3
+        this.buttonValueText.x = this.x+this.xOffset
+        this.icon.x = this.x-this.xOffset
+
+
 
         //Creates price element for button.
-        this.buttonPriceText = gameScene.add.text(x,y+this.priceOffset,this.price+"Kr",{
-            fontSize: `${sX*50}px`, 
+        this.buttonPriceText = gameScene.add.text(this.x,this.y+this.priceOffset,this.price+"Kr",{
+            fontSize: `${sF*50}px`, 
             fill: '#000', 
             fontFamily: 'KodeMonoBold'
         }).setOrigin(0.5,0.5)
@@ -203,6 +209,15 @@ export class shopButton extends Button{
         this.buttonValueText.y += this.accentOffset
     }
 
+    updateText(){
+        this.buttonPriceText.text = this.price+"kr"
+        this.buttonValueText.text = this.value
+
+        this.xOffset = (this.buttonValueText.displayWidth+this.icon.displayWidth)/3
+        this.buttonValueText.x = this.x+this.xOffset
+        this.icon.x = this.x-this.xOffset
+    }
+
     //Toggles visibility of button and contents
     toggleButton(active){
         super.toggleButton(active)
@@ -220,25 +235,22 @@ export class shopButton extends Button{
 
 export class addButton extends Button{
     constructor(gameScene, config,title){
-        super(gameScene,config,gameScene.texture.addButton)
-        const sX = gameScene.scale.width/1920*this.scale
-        const sY = gameScene.scale.height/1080*this.scale
-        const x = this.x
-        const y = this.y
+        super(gameScene,config,gameScene.config.texture.addButton)
+        const sF = gameScene.scale.width/1920*this.scale
 
-        this.priceOffset = sY*30;
-        this.titleOffset = sY*20
+        this.priceOffset = sF*30;
+        this.titleOffset = sF*20
         
         //Adds the text element to show current value
-        this.buttonTitleText = gameScene.add.text(x,y-this.titleOffset,title,{
-            fontSize: `${sX*50}px`, 
+        this.buttonTitleText = gameScene.add.text(this.x,this.y-this.titleOffset,title,{
+            fontSize: `${sF*50}px`, 
             fill: '#fff', 
             fontFamily: 'KodeMonoBold'
         }).setOrigin(0.5,0.5)
 
         //Creates price element for button.
-        this.buttonPriceText = gameScene.add.text(x,y+this.priceOffset,this.price+"Kr",{
-            fontSize: `${sX*50}px`, 
+        this.buttonPriceText = gameScene.add.text(this.x,this.y+this.priceOffset,this.price+"Kr",{
+            fontSize: `${sF*50}px`, 
             fill: '#fff', 
             fontFamily: 'KodeMonoBold'
         }).setOrigin(0.5,0.5)

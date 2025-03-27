@@ -1,4 +1,3 @@
-import { shopButton, Button } from './ButtonClasses.js';
 import  { Shop } from './ShopClass.js';
 import { shopMenu,marketingMenu,managerMenu,worldMenu } from "./MenuClass.js";
 
@@ -6,78 +5,31 @@ export class GameScene extends Phaser.Scene {
     constructor(){
         super({ key: "GameScene", active: false })
 
-        this.money = 0;
+        this.money = 2000;
 
         this.shopList = []
-        this.buttonList = []
-        this.texture = {}
     }
 
     preload() {
-        const config = this.cache.json.get('config')
-        config.assets.forEach((asset) =>{
+        //Loads all assets from config, into the game.
+        this.config = this.cache.json.get('config')
+        this.config.assets.forEach((asset) =>{
             this.load.image(asset.name,asset.path)
         })
 
-        /*
-        //General Menu Assets
-        this.load.image('menuBackground', 'assets/UI/menuBackdrop.png')
-        this.load.image('inactiveMenuTab', 'assets/UI/inactiveMenuTab.png')
-        this.load.image('activeMenuTab', 'assets/UI/activeMenuTab.png')
-
-        //Menu Icons
-        this.load.image('shopIcon', 'assets/UI/shopIcon.png')
-        this.load.image('marketingIcon','assets/UI/marketingIcon.png')
-        this.load.image('managerIcon','assets/UI/managerIcon.png')
-        this.load.image('worldIcon','assets/UI/worldIcon.png')
-
-        //Map, Buttons and shops assets
-        this.load.image('map', 'assets/DK-Kort.png');
-        this.load.image('testB', 'assets/UI/testButton.png');
-        this.load.image('testBDown', 'assets/UI/testButtonDown.png');
-        this.load.image('testBLocked', 'assets/UI/testButtonLocked.png');
-        this.load.image('nettoSprite', 'assets/UI/nettoSprite.png')
-        this.load.image('nettoSpriteGrey', 'assets/UI/nettoSpriteGray.png')
-        
-        this.load.image('button','assets/UI/button.png')
-        this.load.image('greyButton','assets/UI/greyButton.png')
-        this.load.image('addButton', 'assets/UI/addButton.png')
-        this.load.image('addButtonGrey', 'assets/UI/addButtonGrey.png')
-
-        this.load.image('customerIcon', 'assets/UI/customerIcon.png')
-        */
-        this.texture = {
-            shopButton:{
-                button: 'button',
-                greyButton: 'greyButton'
-            },
-            nettoSkin:{
-                grey: 'nettoSpriteGrey',
-                progress: 'nettoSprite'
-            },
-            addButton:{
-                button: 'addButton',
-                greyButton: 'addButtonGrey'
-            }
-        }
     }
     
     create() {
-        const x = this.scale.width
-        const y = this.scale.height
-        const sX = x/1920
-        const sY = y/1080
+        const sF = this.scale.width/1920 //Used for scaling. 
 
-        const scaleFactor = x / 50
-
-        // Loader mappet
-        const map = this.add.image(x/2*0.8, y/2, 'map');
-        map.setScale(x/4000*1.2);
+        //Loads the map, and offsets it from the middle.
+        const map = this.add.image(this.scale.width/2*0.8, this.scale.height/2, 'map');
+        map.setScale(sF/1.7);
 
 
         //--- Menu segment start ---//
         //Adds the background image.
-        this.backgroundImage = this.add.image(this.scale.width,0,'menuBackground').setDisplaySize(sX*550,this.scale.height)
+        this.backgroundImage = this.add.image(this.scale.width,0,'menuBackground').setDisplaySize(sF*550,this.scale.height)
         this.backgroundImage.setOrigin(1,0)
         
         const menuWidth = this.backgroundImage.displayWidth
@@ -92,56 +44,22 @@ export class GameScene extends Phaser.Scene {
         //--- Menu segment end ---//
 
 
-        //--- Test button and shops start ---//
-        //Adding shops to list of shops
+        //Adds the starter shop.
+        const startShop = this.cache.json.get('config').shopConfig[0]
         this.shopList.push(new Shop(
             this,
-            x/2*0.9, 
-            y/4, 
-            150, 
-            this.texture.nettoSkin))
+            startShop.x*sF, 
+            startShop.y*sF, 
+            startShop.size, 
+            startShop.texture))
         
-        this.shopList.push(new Shop(
-            this,
-            x/3*0.9, 
-            y/4, 
-            150, 
-            this.texture.nettoSkin))
-
-        this.shopList.push(new Shop(
-                this,
-                x/1.5*0.9, 
-                y/4, 
-                150, 
-                this.texture.nettoSkin))
-
-        /*/Adds buttons to list of buttons
-        this.buttonList.push(new shopButton(this,{
-            x: x/2*0.9,
-            y: y/2,
-            price: 1000,
-            priceIncrement: 10,
-            value: 2000,
-            valueIncrement: 10,
-            callBack: () => { return null; }
-        },'customerIcon'))
-
-        this.buttonList.push(new Button(this,{
-            x:x/2*1.3,
-            y:y/2,
-            price: 0,
-            priceIncrement: 0,
-            value: 0,
-            valueIncrement: 0,
-            callBack: () => { return null; }
-        },this.texture.shopButton))*/
-        //--- Test button and shops END ---//
 
 
         this.registry.set('money', 0)
     }
 
     update(time, delta) {
+
         //Updates the progress of each shop
         this.shopList.forEach(shop => {
             if (shop.cooldownProgress < shop.cooldown){
@@ -154,17 +72,7 @@ export class GameScene extends Phaser.Scene {
         })
 
         //Checks for if buttons needs to be greyed out.
-        this.buttonList.forEach(b =>{
-            if (!b.buttonRequirements()){
-                b.lock(true)
-            }else if (b.button.texture.key === b.texture.greyButton){
-                b.lock(false)
-            }
-        })
         this.shopMenu.checkButtonLockState()
-
-
-
 
         
         //Adds your money to the registry, so UI can change the status.

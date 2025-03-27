@@ -3,6 +3,7 @@ import { GameScene } from './scenes/GameScene.js';
 import { UIScene } from './scenes/UIScene.js';
 import { BootScene } from './scenes/bootScene.js';
 
+
 const config = {
     type: Phaser.WEBGL,
     title: 'Overlord Rising',
@@ -17,7 +18,7 @@ const config = {
     ],
     scale: {
         mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH
+        autoCenter: Phaser.Scale.CENTER_BOTH,
     },
 }
 
