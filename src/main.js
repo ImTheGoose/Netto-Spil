@@ -1,6 +1,5 @@
 
 import { GameScene } from './scenes/GameScene.js';
-import { UIScene } from './scenes/UIScene.js';
 import { BootScene } from './scenes/bootScene.js';
 
 
@@ -14,7 +13,7 @@ const config = {
     backgroundColor: '#000000',
     pixelArt: false,
     scene: [
-        BootScene,GameScene,UIScene
+        BootScene,GameScene
     ],
     scale: {
         mode: Phaser.Scale.FIT,

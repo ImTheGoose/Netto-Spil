@@ -144,6 +144,7 @@ export class shopMenu extends Menu{
             this.labelHeight = label.displayHeight
             let upDef = config.shopConfig[0].menuButtons.upgrade[0]
             let upNew = newShopConfig.menuButtons.upgrade[0]
+            console.log(upDef)
             bList.push(new shopButton(gameScene,{
                 x: x-offset,
                 y: 0,
@@ -152,7 +153,12 @@ export class shopMenu extends Menu{
                 value: upDef.defaultValue,
                 scale: upDef.scale,
                 valueIncrement: upDef.valueIncrement,
-                callBack: () => { return null; }
+                valueSuffix: upDef.valueSuffix,
+                callBack: () => { 
+                    let defaultShop = config.shopConfig[0].menuButtons.upgrade[0]
+                    let newShop = config.shopConfig[gameScene.shopList.length].menuButtons.upgrade[0]
+                    shop.amountOfPeople += defaultShop.valueIncrement
+                 }
             },upDef.icon))
 
             //updates the buttonheight variable, in case its the first button created. Then fixes the position for the button and the following buttons.
@@ -174,7 +180,12 @@ export class shopMenu extends Menu{
                 value: upDef.defaultValue,
                 scale: upDef.scale,
                 valueIncrement: upDef.valueIncrement,
-                callBack: () => { return null; }
+                valueSuffix: upDef.valueSuffix,
+                callBack: () => { 
+                    let defaultShop = config.shopConfig[0].menuButtons.upgrade[1]
+                    let newShop = config.shopConfig[gameScene.shopList.length].menuButtons.upgrade[1]
+                    shop.cashierSpeed += defaultShop.valueIncrement
+                 }
             },upDef.icon))
             
             upDef = config.shopConfig[0].menuButtons.upgrade[2]
@@ -187,7 +198,12 @@ export class shopMenu extends Menu{
                 value: upDef.defaultValue,
                 scale: upDef.scale,
                 valueIncrement: upDef.valueIncrement,
-                callBack: () => { return null; }
+                valueSuffix: upDef.valueSuffix,
+                callBack: () => { 
+                    let defaultShop = config.shopConfig[0].menuButtons.upgrade[2]
+                    let newShop = config.shopConfig[gameScene.shopList.length].menuButtons.upgrade[2]
+                    shop.moneyMultiplier += defaultShop.valueIncrement
+                 }
             },upDef.icon))
 
             this.buttons.push(bList)

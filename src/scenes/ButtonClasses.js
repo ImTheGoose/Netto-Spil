@@ -36,6 +36,7 @@ export class Button{
                 this.accentButton.setTint(0xb4b4b4)
                 gameScene.input.setDefaultCursor('pointer');
             }
+            console.log(this.price)
         } )
 
         //On Hover Leave
@@ -143,16 +144,59 @@ export class Button{
     }
 }
 
+export class prestigeMenuButton extends Button{
+    constructor(gameScene,config){
+        super(gameScene,config,gameScene.config.texture.prestigeMenuButton)
+        let dW = this.button.displayWidth
+        this.iconImage = gameScene.add.image(config.x, config.y,'prestigeIcon').setOrigin(0.5,0.5).setDisplaySize(dW*0.7,dW*0.7)
+    }
+
+    //Resets position of button and contents
+    resetButtonPosition(){
+        super.resetButtonPosition()
+        this.iconImage.y = this.y
+
+    }
+
+    //Repositions button and contents
+    updatePosition(x,y){
+        super.updatePosition(x,y)
+        if (y){
+            this.iconImage.y = y
+        }
+        if (x){
+            this.iconImage.x = x
+        }
+    }
+
+    //Offsets position of button and contents
+    offsetButtonPosition(){
+        super.offsetButtonPosition()
+        this.iconImage.y += this.accentOffset
+    }
+    
+    //Toggles visibility of button and contents
+    toggleButton(active){
+        super.toggleButton(active)
+        if (active){
+            this.iconImage.setVisible(true)
+        }else{
+            this.iconImage.setVisible(false)
+        }
+    }
+}
+
 export class shopButton extends Button{
     constructor(gameScene, config,icon){
         super(gameScene,config,gameScene.config.texture.shopButton)
+        this.valueSuffix = config.valueSuffix
         const sF = gameScene.scale.width/1920*this.scale
 
         this.priceOffset = sF*60;
         this.valueOffset = sF*40
         
         //Adds the text element to show current value
-        this.buttonValueText = gameScene.add.text(this.x,this.y-this.valueOffset,this.value,{
+        this.buttonValueText = gameScene.add.text(this.x,this.y-this.valueOffset,this.value+this.valueSuffix,{
             fontSize: `${sF*50}px`, 
             fill: '#000', 
             fontFamily: 'KodeMonoBold'
@@ -211,7 +255,7 @@ export class shopButton extends Button{
 
     updateText(){
         this.buttonPriceText.text = this.price+"kr"
-        this.buttonValueText.text = this.value
+        this.buttonValueText.text = this.value+this.valueSuffix
 
         this.xOffset = (this.buttonValueText.displayWidth+this.icon.displayWidth)/3
         this.buttonValueText.x = this.x+this.xOffset

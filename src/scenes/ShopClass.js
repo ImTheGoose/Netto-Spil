@@ -16,10 +16,15 @@ export class Shop {
         this.size = size
         this.texture = texture
         this.pointerOn = false;
+        this.gameScene = gameScene
+
+        this.amountOfPeople = 25
+        this.moneyMultiplier = 1.0
+        this.cashierSpeed = 100
 
         this.cooldown = 2500
         this.cooldownProgress = 0
-        this.collectMoney = 2000;
+        this.pricePerPerson = 10;
 
         const sF = gameScene.scale.width/1920
          
@@ -45,10 +50,16 @@ export class Shop {
         this.progressSprite.on('pointerdown', () =>{
             if(this.cooldownProgress >= this.cooldown){
                 this.cooldownProgress = 0;
-                console.log("Indsamlede "+this.collectMoney+"kr fra nettoen")
-                gameScene.money += this.collectMoney
-                gameScene.input.setDefaultCursor('auto');
+                this.collectMoney()
             }
         })
+    }
+
+    collectMoney(){
+        let mon = this.pricePerPerson*this.amountOfPeople*this.moneyMultiplier
+        mon = Math.round(mon)
+        this.gameScene.money += mon
+        this.gameScene.input.setDefaultCursor('auto');
+        console.log("Indsamlede "+mon+"kr fra nettoen")
     }
 }

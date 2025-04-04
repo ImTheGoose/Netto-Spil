@@ -17,15 +17,17 @@ shopConfig:
         defaultValue: 25
         maxValue: 1000
         valueIncrement: 25
+        valueSuffix: ''
         scale: 0.5
 
       #Upgrade 2 config
       - icon: 'cashierIcon'
         startPrice: 300
         priceMultiplier: 1.3
-        defaultValue: 1
-        maxValue: 10
-        valueIncrement: 1
+        defaultValue: 100
+        maxValue: 400
+        valueIncrement: 10
+        valueSuffix: '%'
         scale: 0.5
 
       #Upgrade 3 config
@@ -35,6 +37,7 @@ shopConfig:
         defaultValue: 1
         maxValue: 2
         valueIncrement: 0.05
+        valueSuffix: 'x'
         scale: 0.5
 
   - name: "Butik 2 (Odense)"
@@ -108,6 +111,9 @@ texture:
   addButton:
     button: 'addButton'
     greyButton: 'addButtonGrey'
+  prestigeMenuButton:
+    button: 'prestigeMenuButton'
+    greyButton: 'prestigeMenuButton'
     
 #Assets are looped in the GameScene and loaded from there.
 assets:
@@ -160,4 +166,14 @@ assets:
     path: "assets/UI/cashierIcon.png"
   - name: "coinHandIcon"
     path: "assets/UI/coinHandIcon.png"
+
+  #UI stuff
+  - name: "prestigeIcon"
+    path: "assets/UI/prestigeIcon.png"
+  - name: "coin"
+    path: "assets/UI/coin.png"
+  - name: "moneyBackground"
+    path: "assets/UI/moneyBackground.png"
+  - name: "prestigeMenuButton"
+    path: "assets/UI/prestigeButton.png"
 

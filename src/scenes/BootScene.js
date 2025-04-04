@@ -15,7 +15,6 @@ export class BootScene extends Phaser.Scene {
 
             //Starts scenes afterwards to ensure config has loaded.
             this.scene.start('GameScene')
-            this.scene.start('UIScene')
             console.log('Resolution:',this.scale.width, this.scale.height)
         })
         .catch(error =>{
