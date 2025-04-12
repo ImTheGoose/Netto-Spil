@@ -18,11 +18,9 @@ export class GameScene extends Phaser.Scene {
             this.load.image(asset.name,asset.path)
         })
 
-        this.load.font('KodeMonoRegular','assets/KodeMono-Regular.ttf')
-        this.load.font('KodeMonoMedium','assets/KodeMono-Medium.ttf')
-        this.load.font('KodeMonoSemiBold','assets/KodeMono-SemiBold.ttf')
-        this.load.font('KodeMonoBold','assets/KodeMono-Bold.ttf')
-
+        this.config.fonts.forEach((font)=>{
+            this.load.font(font.name, font.path)
+        })
     }
     
     create() {
