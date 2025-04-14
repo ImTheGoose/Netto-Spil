@@ -10,23 +10,29 @@ export class NettoClass {
 }
 
 export class Shop {
-    constructor(gameScene,x,y,size,texture){
+    constructor(gameScene,x,y,size,texture,shopNum){
+        const sF = gameScene.scale.width/1920
         this.x = x
         this.y = y
         this.size = size
         this.texture = texture
         this.pointerOn = false;
         this.gameScene = gameScene
+        this.sound = gameScene.sound.add("collectSound")
 
-        this.amountOfPeople = 25
-        this.moneyMultiplier = 1.0
-        this.cashierSpeed = 100
+        this.shopNum = shopNum
+
+        let sC = gameScene.config.shopConfig
+        console.log(sC)
+        this.amountOfPeople = sC.menuButtons.upgrade1.defaultValue
+        this.cashierSpeed = sC.menuButtons.upgrade2.defaultValue
+        this.moneyMultiplier = sC.menuButtons.upgrade3.defaultValue
 
         this.cooldown = 2500
         this.cooldownProgress = 0
-        this.pricePerPerson = 10;
+        this.pricePerPerson = 1;
 
-        const sF = gameScene.scale.width/1920
+
          
          
 
@@ -61,5 +67,6 @@ export class Shop {
         this.gameScene.money += mon
         this.gameScene.input.setDefaultCursor('auto');
         console.log("Indsamlede "+mon+"kr fra nettoen")
+        this.sound.play({volume:1})
     }
 }

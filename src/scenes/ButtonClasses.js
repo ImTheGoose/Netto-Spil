@@ -6,12 +6,14 @@ export class Button{
         this.x = config.x
         this.y = config.y
         this.texture = texture;
-        this.price = config.price
+        this.timesBought = 0
+        this.price = this.calculatePrice()
         this.value = config.value
-        this.priceMultiplier = config.priceMultiplier
         this.valueIncrement = config.valueIncrement
         this.callBack = config.callBack
         this.scale = config.scale
+
+        this.sound = gameScene.sound.add("clickSound")
 
         //Makes shorthands and quick adjustments
         const sF = gameScene.scale.width/1920*this.scale
@@ -51,6 +53,7 @@ export class Button{
             this.button.setTint(0x767676)
             this.accentButton.setTint(0x767676)
             this.offsetButtonPosition();
+            this.sound.play({volume:8})
         })
 
         //On button release
@@ -58,7 +61,8 @@ export class Button{
             if (this.buttonRequirements()){
                 console.log("button clicked")
                 this.gameScene.money -= this.price;
-                this.price = Math.round(this.priceMultiplier*this.price)
+                this.timesBought += 1
+                this.price = this.calculatePrice()
                 
                 this.value = Math.round((this.value+this.valueIncrement) * 100) / 100;
                 this.updateText()
@@ -69,6 +73,10 @@ export class Button{
             }
             this.resetButtonPosition()
         })
+    }
+
+    calculatePrice(){
+        return 0;
     }
 
     updateText(){
@@ -149,6 +157,8 @@ export class prestigeMenuButton extends Button{
         super(gameScene,config,gameScene.config.texture.prestigeMenuButton)
         let dW = this.button.displayWidth
         this.iconImage = gameScene.add.image(config.x, config.y,'prestigeIcon').setOrigin(0.5,0.5).setDisplaySize(dW*0.7,dW*0.7)
+        this.accentOffset *= 2
+        this.updatePosition(config.x,config.y)
     }
 
     //Resets position of button and contents
@@ -187,8 +197,10 @@ export class prestigeMenuButton extends Button{
 }
 
 export class shopButton extends Button{
-    constructor(gameScene, config,icon){
+    constructor(gameScene, config,icon,assignedShop){
         super(gameScene,config,gameScene.config.texture.shopButton)
+        this.assignedShop = assignedShop
+        this.price = this.calculatePrice()
         this.valueSuffix = config.valueSuffix
         const sF = gameScene.scale.width/1920*this.scale
 
@@ -219,6 +231,19 @@ export class shopButton extends Button{
             fontFamily: 'KodeMonoBold'
         }).setOrigin(0.5,0.5)
         this.fitText(this.buttonPriceText, this.button.displayWidth)
+    }
+
+    calculatePrice(){
+        if (!this.assignedShop){
+            return -1;
+        }
+        let c = this.gameScene.config
+        let pC = c.priceConfig
+
+        let growthConstant = pC.incrementConstant * (pC.incrementFactor ** this.assignedShop.shopNum)
+        let price = growthConstant*(pC.growthFactor ** this.timesBought)
+        price = Math.round(price/10)*10
+        return price;
     }
 
     //Resets position of button and contents
@@ -299,6 +324,20 @@ export class addButton extends Button{
             fontFamily: 'KodeMonoBold'
         }).setOrigin(0.5,0.5)
         this.fitText(this.buttonPriceText, this.button.displayWidth)
+    }
+
+    calculatePrice(){
+        let c = this.gameScene.config
+        let pC = c.priceConfig.shop
+
+        let price = pC.priceConstant * (pC.priceFactor ** this.gameScene.shopList.length)
+        price = Math.round(price)
+
+        return price;
+    }
+
+    updateText(){
+        this.buttonPriceText.text = this.price+"kr"
     }
 
     //Resets position of button and contents

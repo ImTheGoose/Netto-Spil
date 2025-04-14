@@ -99,29 +99,27 @@ export class shopMenu extends Menu{
         this.labels = []
         this.buttonHeight = 0; //Gets set when a button is created
         this.labelHeight = 0;
-        this.labelPadding = this.menuConfig.labelPadding
+        this.labelPadding = this.menuConfig.labelPadding*sF
+
+
 
 
         //Initiates the add button to the menu.
         this.addButton = new addButton(gameScene,{
             x:gameScene.scale.width-menuWidth/2,
             y:150*(1+gameScene.shopList.length)+this.contentPadding,
-            price: config.shopConfig[gameScene.shopList.length+1].price,
             scale: 0.5,
             callBack: ()=> { //Logic for creating a new shop, and updating the add button
-                let defaultShop = config.shopConfig[0]
-                let newShop = config.shopConfig[gameScene.shopList.length]
+                let defaultShop = config.shopConfig
+                let newShop = config.shops[gameScene.shopList.length]
                 gameScene.shopList.push(new Shop(gameScene,
-                    newShop.x,
-                    newShop.y,
+                    newShop.x*sF,
+                    newShop.y*sF,
                     defaultShop.size,
-                    defaultShop.texture
-                ))
+                    defaultShop.texture,
+                    gameScene.shopList.length+1))
 
-                if (config.shopConfig.length > gameScene.shopList.length){
-                    this.addButton.price = config.shopConfig[gameScene.shopList.length].price
-                    this.addButton.buttonPriceText.text = this.addButton.price+"kr"
-                }else{
+                if (config.shops.length <= gameScene.shopList.length){
                     this.addButton.toggleButton(false)
                     this.addButton = null
                 }
@@ -133,7 +131,7 @@ export class shopMenu extends Menu{
             let bList = [] //Temporay list of buttons
             const x = gameScene.scale.width-menuWidth/2
             const offset = (menuWidth-50*sF)/3 //Offset on x axis, to make sure they are evenly spaced.
-            const newShopConfig = config.shopConfig[gameScene.shopList.length]
+            const newShopConfig = config.shops[gameScene.shopList.length]
 
             let label = gameScene.add.text(x,this.initialOffset,newShopConfig.name,{
                 fontSize: `${sF*this.menuConfig.labelSize}px`, 
@@ -142,24 +140,18 @@ export class shopMenu extends Menu{
             }).setOrigin(0.5,0.5)
 
             this.labelHeight = label.displayHeight
-            let upDef = config.shopConfig[0].menuButtons.upgrade[0]
-            let upNew = newShopConfig.menuButtons.upgrade[0]
-            console.log(upDef)
+            let upDef = config.shopConfig.menuButtons.upgrade1
             bList.push(new shopButton(gameScene,{
                 x: x-offset,
                 y: 0,
-                price: upDef.startPrice,
-                priceMultiplier: upNew.priceMultiplier,
                 value: upDef.defaultValue,
-                scale: upDef.scale,
+                scale: config.shopConfig.menuButtons.upgradeButtonScale,
                 valueIncrement: upDef.valueIncrement,
                 valueSuffix: upDef.valueSuffix,
                 callBack: () => { 
-                    let defaultShop = config.shopConfig[0].menuButtons.upgrade[0]
-                    let newShop = config.shopConfig[gameScene.shopList.length].menuButtons.upgrade[0]
-                    shop.amountOfPeople += defaultShop.valueIncrement
+                    shop.amountOfPeople += bList[0].valueIncrement
                  }
-            },upDef.icon))
+            },upDef.icon,shop))
 
             //updates the buttonheight variable, in case its the first button created. Then fixes the position for the button and the following buttons.
             this.buttonHeight = bList[0].button.displayHeight+bList[0].accentOffset
@@ -170,41 +162,31 @@ export class shopMenu extends Menu{
             
             bList[0].updatePosition(null,y)
             
-            upDef = config.shopConfig[0].menuButtons.upgrade[1]
-            upNew = newShopConfig.menuButtons.upgrade[1]
+            upDef = config.shopConfig.menuButtons.upgrade2
             bList.push(new shopButton(gameScene,{
                 x: x,
                 y: y,
-                price: upDef.startPrice,
-                priceMultiplier: upNew.priceMultiplier,
                 value: upDef.defaultValue,
-                scale: upDef.scale,
+                scale: config.shopConfig.menuButtons.upgradeButtonScale,
                 valueIncrement: upDef.valueIncrement,
                 valueSuffix: upDef.valueSuffix,
                 callBack: () => { 
-                    let defaultShop = config.shopConfig[0].menuButtons.upgrade[1]
-                    let newShop = config.shopConfig[gameScene.shopList.length].menuButtons.upgrade[1]
-                    shop.cashierSpeed += defaultShop.valueIncrement
+                    shop.cashierSpeed += bList[1].valueIncrement
                  }
-            },upDef.icon))
+            },upDef.icon,shop))
             
-            upDef = config.shopConfig[0].menuButtons.upgrade[2]
-            upNew = newShopConfig.menuButtons.upgrade[2]
+            upDef = config.shopConfig.menuButtons.upgrade3
             bList.push(new shopButton(gameScene,{
                 x: x+offset,
                 y: y,
-                price: upDef.startPrice,
-                priceMultiplier: upNew.priceMultiplier,
                 value: upDef.defaultValue,
-                scale: upDef.scale,
+                scale: config.shopConfig.menuButtons.upgradeButtonScale,
                 valueIncrement: upDef.valueIncrement,
                 valueSuffix: upDef.valueSuffix,
                 callBack: () => { 
-                    let defaultShop = config.shopConfig[0].menuButtons.upgrade[2]
-                    let newShop = config.shopConfig[gameScene.shopList.length].menuButtons.upgrade[2]
-                    shop.moneyMultiplier += defaultShop.valueIncrement
+                    shop.pricePerPerson += bList[2].valueIncrement
                  }
-            },upDef.icon))
+            },upDef.icon,shop))
 
             this.buttons.push(bList)
 
@@ -220,6 +202,7 @@ export class shopMenu extends Menu{
     checkButtonLockState(){
         super.checkButtonLockState()
         if(this.addButton){
+            console.log(this.addButton.price)
             if (!this.addButton.buttonRequirements()){
                 this.addButton.lock(true)
             }else if (this.addButton.button.texture.key === this.addButton.texture.greyButton){

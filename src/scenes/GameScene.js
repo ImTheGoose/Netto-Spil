@@ -6,7 +6,7 @@ export class GameScene extends Phaser.Scene {
     constructor(){
         super({ key: "GameScene", active: false })
 
-        this.money = 2000;
+        this.money = 1000000;
 
         this.shopList = []
     }
@@ -20,6 +20,10 @@ export class GameScene extends Phaser.Scene {
 
         this.config.fonts.forEach((font)=>{
             this.load.font(font.name, font.path)
+        })
+
+        this.config.sounds.forEach((sound)=>{
+            this.load.audio(sound.name,sound.path)
         })
     }
     
@@ -70,13 +74,14 @@ export class GameScene extends Phaser.Scene {
 
 
         //Adds the starter shop.
-        const startShop = this.cache.json.get('config').shopConfig[0]
+        const startShop = this.cache.json.get('config').shops[0]
+        const defShop = this.cache.json.get('config').shopConfig
         this.shopList.push(new Shop(
             this,
             startShop.x*sF, 
             startShop.y*sF, 
-            startShop.size, 
-            startShop.texture))
+            defShop.size, 
+            defShop.texture,1))
         
 
             
@@ -95,7 +100,7 @@ export class GameScene extends Phaser.Scene {
 
     update(time, delta) {
 
-        this.moneyText.text = this.money+"kr"
+        this.moneyText.text = Math.round(this.money)+"kr"
         this.fitText(this.moneyText,this.moneyBackground.displayWidth*0.7)
 
         //Updates the progress of each shop
@@ -112,8 +117,6 @@ export class GameScene extends Phaser.Scene {
         //Checks for if buttons needs to be greyed out.
         this.shopMenu.checkButtonLockState()
 
-        
-        //Adds your money to the registry, so UI can change the status.
-        this.registry.set('money', Phaser.Math.RoundTo(this.money,-2))
+    
     }
 }

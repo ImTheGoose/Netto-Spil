@@ -1,74 +1,60 @@
+priceConfig:
+  growthFactor: 1.25 #Prices for upgrades are calculated as Price(upNum)=growthIncrement*growthFactor^upNum
+  incrementFactor: 1.5 #growthIncrement is calculated as grInc(shopNum)=incrementConstant*incrementFactor^shopNum
+  incrementConstant: 36.5
+
+  shop: #Shop prices is calculated as constant*factor^shopNum - Where shopNum is on top of default num
+    priceFactor: 2.5
+    priceConstant: 5000
+
+  rebirth: #Rebirth contents are calculated as constant*factor^rebirthNum
+    multiplierFactor: 1.5
+    multiplierConstant: 1
+    requirementFactor: 1.65
+    requirementConstant: 5110
+  
+
 shopConfig:
+  size: 70
+  maxUpgrades: 20
+  texture:
+    grey: 'nettoSpriteGrey'
+    progress: 'nettoSprite'
+  menuButtons:
+    upgradeButtonScale: 0.5
+    upgrade1:
+      icon: 'customerIcon'
+      defaultValue: 4
+      valueIncrement: 2
+      valueSuffix: ''
+    upgrade2:
+      icon: 'cashierIcon'
+      defaultValue: 100
+      valueIncrement: 10
+      valueSuffix: "%"
+    upgrade3:
+      icon: 'coinHandIcon'
+      defaultValue: 3
+      valueIncrement: 3
+      valueSuffix: ''
+
+
+shops:
   - name: "Butik 1 (København)"
     x: 1000
     y: 700
-    size: 70
-    price: 0
-    clickAmount: 200
-    texture:
-      grey: 'nettoSpriteGrey'
-      progress: 'nettoSprite'
-    menuButtons:
-      upgrade:
-      #Upgrade 1 config
-      - icon: 'customerIcon'
-        startPrice: 100
-        priceMultiplier: 1.2
-        defaultValue: 25
-        maxValue: 1000
-        valueIncrement: 25
-        valueSuffix: ''
-        scale: 0.5
-
-      #Upgrade 2 config
-      - icon: 'cashierIcon'
-        startPrice: 300
-        priceMultiplier: 1.3
-        defaultValue: 100
-        maxValue: 400
-        valueIncrement: 10
-        valueSuffix: '%'
-        scale: 0.5
-
-      #Upgrade 3 config
-      - icon: 'coinHandIcon'
-        startPrice: 500
-        priceMultiplier: 1.5
-        defaultValue: 1
-        maxValue: 2
-        valueIncrement: 0.05
-        valueSuffix: 'x'
-        scale: 0.5
 
   - name: "Butik 2 (Odense)"
     x: 600
     y: 800
-    price: 500
-    menuButtons:
-      upgrade:
-      - priceMultiplier: 1.4
-      - priceMultiplier: 1.6
-      - priceMultiplier: 2
 
   - name: "Butik 3 (Aarhus)"
     x: 550
     y: 550
-    price: 7500
-    menuButtons:
-      upgrade:
-      - priceMultiplier: 1.6
-      - priceMultiplier: 1.8
-      - priceMultiplier: 2.3
 
   - name: "Butik 4 (Skagen)"
     x: 550
     y: 100
-    price: 50000
-    menuButtons:
-      upgrade:
-      - priceMultiplier: 2
-      - priceMultiplier: 2.4
-      - priceMultiplier: 2.8
 
 
 menu:
@@ -114,7 +100,12 @@ texture:
   prestigeMenuButton:
     button: 'prestigeMenuButton'
     greyButton: 'prestigeMenuButton'
-    
+sounds:
+  - name: "clickSound"
+    path: "assets/Sounds/click.mp3"
+  - name: "collectSound"
+    path: "assets/Sounds/collect.mp3"
+
 #Fonts are looped in the GameScene and loaded from there.
 fonts:
   - name: "KodeMonoRegular"    
