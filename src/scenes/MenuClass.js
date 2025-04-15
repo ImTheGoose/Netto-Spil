@@ -195,11 +195,15 @@ export class shopMenu extends Menu{
 
             this.fixEndItemPositions(y+this.contentPadding+bList[0].button.displayHeight)
 
+            if(!this.active){
+                this.toggleActive(false)
+            }
+
 
         })
 
 
-        this.toggleActive(true)
+        this.toggleActive(false)
     }
 
     checkButtonLockState(){
@@ -246,7 +250,7 @@ export class shopMenu extends Menu{
 export class marketingMenu extends Menu{
     constructor(gameScene,menuWidth,iconSize){
         super(gameScene,menuWidth,iconSize,gameScene.config.menu.menu2)
-
+        
 
     }
 }
@@ -255,6 +259,7 @@ export class managerMenu extends Menu{
     constructor(gameScene,menuWidth,iconSize){
         super(gameScene,menuWidth,iconSize,gameScene.config.menu.menu3)
 
+        this.toggleActive(true)
 
     }
 }

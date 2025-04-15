@@ -60,7 +60,7 @@ export class GameScene extends Phaser.Scene {
         this.managerMenu = new managerMenu(this,menuWidth,iconSize)
         this.worldMenu = new worldMenu(this,menuWidth,iconSize)
 
-        this.activeMenu = this.shopMenu 
+        this.activeMenu = this.managerMenu 
         //--- Menu segment end ---//
 
         this.prestigeMenuButton = new prestigeMenuButton(this,{
