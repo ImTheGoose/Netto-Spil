@@ -28,7 +28,7 @@ export class Shop {
         console.log(sC)
         this.amountOfPeople = sC.menuButtons.upgrade1.defaultValue
         this.cashierSpeed = sC.menuButtons.upgrade2.defaultValue
-        this.moneyMultiplier = sC.menuButtons.upgrade3.defaultValue
+        this.pricePerPerson = sC.menuButtons.upgrade3.defaultValue
 
         this.manager = true
         this.managerSpeed = 100;
@@ -40,7 +40,6 @@ export class Shop {
 
         this.cooldown = 2500
         this.cooldownProgress = 0
-        this.pricePerPerson = 1;
 
 
          
@@ -131,9 +130,13 @@ export class Shop {
 
 
 
-    collectMoney(){
+    collectMoney(isManager){
+        let m = 1
+        if(isManager){
+            m = this.managerMultiplier
+        }
         this.cooldownProgress = 0;
-        let mon = this.pricePerPerson*this.amountOfPeople*this.moneyMultiplier
+        let mon = this.amountOfPeople*this.pricePerPerson*m
         mon = Math.round(mon)
         this.gameScene.money += mon
         this.gameScene.input.setDefaultCursor('auto');

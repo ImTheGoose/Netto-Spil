@@ -180,7 +180,7 @@ export class shopMenu extends Menu{
         })
 
 
-        this.toggleActive(false)
+        this.toggleActive(true)
     }
 
     checkButtonLockState(){
@@ -337,13 +337,12 @@ export class managerMenu extends Menu{
             this.toggleActive(this.active)
         })
 
-        this.toggleActive(true)
+        this.toggleActive(false)
     }
 
     checkButtonLockState(){
         super.checkButtonLockState()
         this.managers.forEach((m)=>{
-            //m.addManagerButton.checkButtonLockState()
             this.updateButtonLock(m.speedButton)
             this.updateButtonLock(m.multiplierButton)
             this.updateButtonLock(m.addManagerButton)
@@ -372,7 +371,6 @@ export class managerMenu extends Menu{
                 }
                 m.addManagerButton.toggleButton(true)
 
-                //m.managerBar.toggleActive(true)
             })
 
 

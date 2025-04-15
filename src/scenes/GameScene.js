@@ -6,7 +6,7 @@ export class GameScene extends Phaser.Scene {
     constructor(){
         super({ key: "GameScene", active: false })
 
-        this.money = 1000000;
+        this.money = 0;
 
         this.shopList = []
     }
@@ -60,7 +60,7 @@ export class GameScene extends Phaser.Scene {
         this.managerMenu = new managerMenu(this,menuWidth,iconSize)
         //this.worldMenu = new worldMenu(this,menuWidth,iconSize)
 
-        this.activeMenu = this.managerMenu 
+        this.activeMenu = this.shopMenu 
         //--- Menu segment end ---//
 
         this.prestigeMenuButton = new prestigeMenuButton(this,{
