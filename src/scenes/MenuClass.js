@@ -276,18 +276,19 @@ export class managerMenu extends Menu{
 
 
 
-
+            let buttonConfig = config.shopConfig.menuButtons.managerUpgrade1
             let speedButton = new shopButton(gameScene,{
-                x:gameScene.scale.width-menuWidth/3,
+                x:gameScene.scale.width-menuWidth/3*2,
                 y:400,
-                scale:0.5,
-                value:0,
-                valueIncrement:0,
-                valueSuffix:"",
+                scale:config.shopConfig.menuButtons.upgradeButtonScale,
+                value:buttonConfig.defaultValue,
+                valueIncrement:buttonConfig.valueIncrement,
+                valueSuffix:buttonConfig.valueSuffix,
                 callBack:()=>{
+                    shop.managerSpeed += speedButton.valueIncrement
                     return;
                 }
-            },'cashierIcon',shop)
+            },buttonConfig.icon,shop)
 
 
 
@@ -298,17 +299,19 @@ export class managerMenu extends Menu{
 
             speedButton.updatePosition(null,y+this.contentPadding)
 
+            buttonConfig = config.shopConfig.menuButtons.managerUpgrade2
             let multiplierButton = new shopButton(gameScene,{
-                x:gameScene.scale.width-menuWidth/3*2,
+                x:gameScene.scale.width-menuWidth/3,
                 y:y,
-                scale:0.5,
-                value:0,
-                valueIncrement:0,
-                valueSuffix:"",
+                scale:config.shopConfig.menuButtons.upgradeButtonScale,
+                value:buttonConfig.defaultValue,
+                valueIncrement:buttonConfig.valueIncrement,
+                valueSuffix:buttonConfig.valueSuffix,
                 callBack:()=>{
+                    shop.managerMultiplier += multiplierButton.valueIncrement
                     return;
                 }
-            },'cashierIcon',shop)
+            },buttonConfig.icon,shop)
 
 
             let button = new addButton(gameScene,{

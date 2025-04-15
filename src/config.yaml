@@ -58,6 +58,16 @@ shopConfig:
       defaultValue: 3
       valueIncrement: 3
       valueSuffix: ''
+    managerUpgrade1:
+      icon: 'customerIcon'
+      defaultValue: 100
+      valueIncrement: 5
+      valueSuffix: '%'
+    managerUpgrade2:
+      icon: 'customerIcon'
+      defaultValue: 1
+      valueIncrement: 0.05
+      valueSuffix: 'x'
 
 
 shops:

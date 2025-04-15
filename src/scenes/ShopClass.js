@@ -71,7 +71,6 @@ export class Shop {
 
         this.progressSprite.on('pointerdown', () =>{
             if(this.cooldownProgress >= this.cooldown){
-                this.cooldownProgress = 0;
                 this.collectMoney()
             }
         })
@@ -80,6 +79,8 @@ export class Shop {
     }
 
     managerCollect(){
+        this.collectMoney()
+        this.managerCooldownProgress = 0;
         return;
     }
 
@@ -129,6 +130,7 @@ export class Shop {
 
 
     collectMoney(){
+        this.cooldownProgress = 0;
         let mon = this.pricePerPerson*this.amountOfPeople*this.moneyMultiplier
         mon = Math.round(mon)
         this.gameScene.money += mon
