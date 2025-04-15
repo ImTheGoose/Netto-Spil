@@ -1,5 +1,5 @@
 import  { Shop } from './ShopClass.js';
-import { shopMenu,marketingMenu,managerMenu,worldMenu } from "./MenuClass.js";
+import { shopMenu,managerMenu } from "./MenuClass.js";
 import { prestigeMenuButton } from './ButtonClasses.js';
 
 export class GameScene extends Phaser.Scene {
@@ -56,9 +56,9 @@ export class GameScene extends Phaser.Scene {
         const iconSize = menuWidth/4;
 
         this.shopMenu = new shopMenu(this,menuWidth,iconSize)
-        this.marketingMenu = new marketingMenu(this,menuWidth,iconSize)
+        //this.marketingMenu = new marketingMenu(this,menuWidth,iconSize)
         this.managerMenu = new managerMenu(this,menuWidth,iconSize)
-        this.worldMenu = new worldMenu(this,menuWidth,iconSize)
+        //this.worldMenu = new worldMenu(this,menuWidth,iconSize)
 
         this.activeMenu = this.managerMenu 
         //--- Menu segment end ---//

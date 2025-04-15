@@ -14,11 +14,11 @@ class Menu {
         this.initialOffset = sF*config.menu.initialOffset
 
         //Inserts the icon background element, and set as inactive
-        this.iconBackground = gameScene.add.image(gameScene.scale.width-menuConfig.index*iconSize,0,'inactiveMenuTab').setOrigin(1,0).setDisplaySize(iconSize,iconSize).setInteractive()
+        this.iconBackground = gameScene.add.image(gameScene.scale.width-menuConfig.index*iconSize*2,0,'inactiveMenuTab').setOrigin(1,0).setDisplaySize(iconSize*2,iconSize).setInteractive()
 
 
-        const iconX = this.iconBackground.x-iconSize/2 //Calculates center of the icon background
-        const iconY = this.iconBackground.y+iconSize/2
+        const iconX = this.iconBackground.x-this.iconBackground.displayWidth/2 //Calculates center of the icon background
+        const iconY = this.iconBackground.y+this.iconBackground.displayHeight/2
         this.icon = gameScene.add.image(iconX,iconY/1.25,menuConfig.icon).setDisplaySize(iconSize/1.7,iconSize/1.7)
 
         this.nameText = gameScene.add.text(iconX,iconY+iconSize/2.8,menuConfig.name,{
@@ -71,7 +71,7 @@ class Menu {
 
 export class shopMenu extends Menu{
     constructor(gameScene,menuWidth,iconSize){
-        super(gameScene,menuWidth,iconSize,gameScene.config.menu.menu1)
+        super(gameScene,menuWidth,iconSize,gameScene.config.menu.upgradeMenu)
         const sF = gameScene.scale.width/1920 //Scaling
         const config = gameScene.config
 
@@ -249,17 +249,10 @@ export class shopMenu extends Menu{
 
 }
 
-export class marketingMenu extends Menu{
-    constructor(gameScene,menuWidth,iconSize){
-        super(gameScene,menuWidth,iconSize,gameScene.config.menu.menu2)
-
-        this.toggleActive(false)
-    }
-}
 
 export class managerMenu extends Menu{
     constructor(gameScene,menuWidth,iconSize){
-        super(gameScene,menuWidth,iconSize,gameScene.config.menu.menu3)
+        super(gameScene,menuWidth,iconSize,gameScene.config.menu.managerMenu)
 
         this.addManagerButtons = []
 
@@ -301,12 +294,4 @@ export class managerMenu extends Menu{
 
     }
     
-}
-
-export class worldMenu extends Menu{
-    constructor(gameScene,menuWidth,iconSize,){
-        super(gameScene,menuWidth,iconSize,gameScene.config.menu.menu4)
-
-        this.toggleActive(false)
-    }
 }
