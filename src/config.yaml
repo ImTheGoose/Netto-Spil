@@ -59,12 +59,12 @@ shopConfig:
       valueIncrement: 3
       valueSuffix: ''
     managerUpgrade1:
-      icon: 'customerIcon'
+      icon: 'speedIcon'
       defaultValue: 100
       valueIncrement: 5
       valueSuffix: '%'
     managerUpgrade2:
-      icon: 'customerIcon'
+      icon: 'multiplierIcon'
       defaultValue: 1
       valueIncrement: 0.05
       valueSuffix: 'x'
@@ -204,6 +204,10 @@ assets:
     path: "assets/UI/cashierIcon.png"
   - name: "coinHandIcon"
     path: "assets/UI/coinHandIcon.png"
+  - name: "speedIcon"
+    path: "assets/UI/speedIcon.png"
+  - name: "multiplierIcon"
+    path: "assets/UI/multiplierIcon.png"
 
   #UI stuff
   - name: "prestigeIcon"
