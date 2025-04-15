@@ -112,6 +112,18 @@ export class GameScene extends Phaser.Scene {
             }
             const cropHeight = 1080 * shop.cooldownProgress/shop.cooldown;
             shop.progressSprite.setCrop(0,1080-cropHeight,1080,cropHeight)
+
+            if (shop.manager){
+                if(shop.managerCooldownProgress < shop.managerCooldown){
+                    shop.managerCooldownProgress += delta*(shop.managerSpeed/100)
+                }else if (shop.managerCooldownProgress >= shop.managerCooldown){
+                    shop.managerCollect()
+                }
+                const managerCropHeight = shop.managerProgress.width * shop.managerCooldownProgress/shop.managerCooldown
+
+                shop.managerProgress.setCrop(0,0,managerCropHeight,shop.managerProgress.height)
+            }
+
         })
 
         //Checks for if buttons needs to be greyed out.

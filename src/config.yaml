@@ -39,6 +39,8 @@ shopConfig:
   texture:
     grey: 'nettoSpriteGrey'
     progress: 'nettoSprite'
+    managerGrey: 'managerGrey'
+    managerProgress: 'managerProgress'
   menuButtons:
     upgradeButtonScale: 0.5
     upgrade1:
@@ -105,10 +107,8 @@ texture:
   shopButton:
     button: 'button'
     greyButton: 'greyButton'
-  
-  nettoSkin:
-    grey: 'nettoSpriteGrey'
-    progress: 'nettoSprite'
+
+
   
   addButton:
     button: 'addButton'
@@ -173,7 +173,7 @@ assets:
   - name: "nettoSpriteGrey"
     path: "assets/UI/nettoSpriteGray.png"
   - name: "managerProgress"
-    path: "assets/UI/managerProgess.png"
+    path: "assets/UI/managerProgress.png"
   - name: "managerGrey"
     path: "assets/UI/managerGrey.png"
   

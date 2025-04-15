@@ -30,9 +30,13 @@ export class Shop {
         this.cashierSpeed = sC.menuButtons.upgrade2.defaultValue
         this.moneyMultiplier = sC.menuButtons.upgrade3.defaultValue
 
-        this.manager = false
-        this.managerSpeed = 0;
+        this.manager = true
+        this.managerSpeed = 100;
         this.managerMultiplier = 0;
+        const managerOffset = 45
+        const managerHeight = size/8
+        this.managerCooldown = 1500
+        this.managerCooldownProgress = 0
 
         this.cooldown = 2500
         this.cooldownProgress = 0
@@ -44,6 +48,11 @@ export class Shop {
 
         this.greySprite = gameScene.add.image(x, y, texture.grey).setDisplaySize( 0,  0)
         this.progressSprite = gameScene.add.image(x, y, texture.progress).setDisplaySize( 0,  0).setInteractive();
+
+
+        this.managerGrey = gameScene.add.image(x,y+managerOffset*sF,texture.managerGrey).setDisplaySize(size*sF,managerHeight*sF)
+        this.managerProgress = gameScene.add.image(x,y+managerOffset*sF,texture.managerProgress).setDisplaySize(size*sF,managerHeight*sF)
+
         this.initialAnimation()
 
         gameScene.events.emit('shopCreated', this)
@@ -68,6 +77,10 @@ export class Shop {
         })
     }
 
+    managerCollect(){
+        return;
+    }
+
     toggleManager(active){
         if (!active) { return; }
         
@@ -85,8 +98,10 @@ export class Shop {
             displayHeight: sF*this.size,
             alpha: {from: 0.5, to:1},
             duration: 800,
-            ease: "Bounce.Out"
+            ease: "Bounce.Out",
+            onComplete: ()=>{        console.log(this.greySprite.displayWidth)}
         })
+        
 
     }
 

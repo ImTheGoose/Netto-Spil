@@ -195,7 +195,6 @@ export class shopMenu extends Menu{
             })
         })
         if(this.addButton){
-            console.log(this.addButton.price)
             if (!this.addButton.buttonRequirements()){
                 this.addButton.lock(true)
             }else if (this.addButton.button.texture.key === this.addButton.texture.greyButton){
