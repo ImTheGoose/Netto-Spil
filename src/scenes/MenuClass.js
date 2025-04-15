@@ -346,7 +346,23 @@ export class managerMenu extends Menu{
         this.toggleActive(true)
     }
 
+    checkButtonLockState(){
+        super.checkButtonLockState()
+        this.managers.forEach((m)=>{
+            //m.addManagerButton.checkButtonLockState()
+            this.updateButtonLock(m.speedButton)
+            this.updateButtonLock(m.multiplierButton)
+            this.updateButtonLock(m.addManagerButton)
+        })
+    }
 
+    updateButtonLock(button){
+        if (!button.buttonRequirements()){
+            button.lock(true)
+        }else if (button.button.texture.key === button.texture.greyButton){
+            button.lock(false)
+        }
+    }
 
     toggleActive(active){
         super.toggleActive(active)
