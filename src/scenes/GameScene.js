@@ -117,6 +117,8 @@ export class GameScene extends Phaser.Scene {
         //Checks for if buttons needs to be greyed out.
         this.shopMenu.checkButtonLockState()
 
+        this.managerMenu.checkButtonLockState()
+
     
     }
 }

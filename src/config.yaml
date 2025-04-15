@@ -94,6 +94,10 @@ menu:
     name: 'Managers'
     icon: 'managerIcon'
     index: 0
+    labelPadding: 40 #Padding between label and buttons
+    labelSize: 35
+    labelColor: '#ffffff' #Hex Value
+    labelFontWeight: 'Medium' #Bold, SemiBold, Medium or Regular
 
 
 

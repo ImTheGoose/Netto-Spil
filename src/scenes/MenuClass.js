@@ -256,40 +256,125 @@ export class managerMenu extends Menu{
 
         this.addManagerButtons = []
 
+        const sF = gameScene.scale.width/1920 //Scaling
         const config = gameScene.config
 
+        this.managers = []
+
+        this.labels = []
+        this.buttonHeight = 0; //Gets set when a button is created
+        this.labelHeight = 0;
+        this.labelPadding = this.menuConfig.labelPadding*sF
+
+
         gameScene.events.on('shopCreated',(shop)=>{
+
+
+            const x = gameScene.scale.width-menuWidth/2
+            const newShopConfig = config.shops[gameScene.shopList.length]
+        
+            let label = gameScene.add.text(x,this.initialOffset,newShopConfig.name,{
+                fontSize: `${sF*this.menuConfig.labelSize}px`, 
+                fill: this.menuConfig.labelColor, 
+                fontFamily: `KodeMono${this.menuConfig.labelFontWeight}`,
+            }).setOrigin(0.5,0.5)
+
+            this.labelHeight = label.displayHeight
+
+
+
+
+            let speedButton = new shopButton(gameScene,{
+                x:gameScene.scale.width-menuWidth/3,
+                y:400,
+                scale:0.5,
+                value:0,
+                valueIncrement:0,
+                valueSuffix:"",
+                callBack:()=>{
+                    return;
+                }
+            },'cashierIcon',shop)
+
+
+
+            this.buttonHeight = speedButton.button.displayHeight
+
+            let y = (this.buttonHeight+this.contentPadding)*gameScene.shopList.length+this.initialOffset+(this.labelHeight+this.labelPadding)*this.labels.length
+            label.y = y-(this.labelHeight+this.labelPadding)
+            this.labels.push(label)
+
+            speedButton.updatePosition(null,y+this.contentPadding)
+
+            let multiplierButton = new shopButton(gameScene,{
+                x:gameScene.scale.width-menuWidth/3*2,
+                y:y,
+                scale:0.5,
+                value:0,
+                valueIncrement:0,
+                valueSuffix:"",
+                callBack:()=>{
+                    return;
+                }
+            },'cashierIcon',shop)
+
+
             let button = new addButton(gameScene,{
                 x:gameScene.scale.width-menuWidth/2,
-                y:400*(1+gameScene.shopList.length)+this.contentPadding,
+                y:y+this.contentPadding,
                 scale: 0.5,
                 callBack:()=>{
                     shop.toggleManager(true)
                     button.disableButton()
+                    this.toggleActive(this.active)
                 }
-            },`Buy manager for ${config.shops[gameScene.shopList.length].name}`)
+            },`Køb manager`)
 
+            this.managers.push({
+                label: label,
+                speedButton: speedButton,
+                multiplierButton: multiplierButton,
+                managerBar: null,
+                addManagerButton: button,
+            })
 
             this.addManagerButtons.push(button)
 
-            if (!this.active){
-                this.toggleActive(false)
-            }
+            this.toggleActive(this.active)
         })
 
         this.toggleActive(true)
     }
 
+
+
     toggleActive(active){
         super.toggleActive(active)
         if(active){
-            this.addManagerButtons.forEach((b)=>{
-                b.toggleButton(true)
+            this.managers.forEach((m)=>{
+                m.label.setVisible(true)
+                if (m.addManagerButton.disabled){
+                    m.speedButton.toggleButton(true)
+                    m.multiplierButton.toggleButton(true)
+                }else{
+                    m.speedButton.toggleButton(false)
+                    m.multiplierButton.toggleButton(false)
+                }
+                m.addManagerButton.toggleButton(true)
+
+                //m.managerBar.toggleActive(true)
             })
+
+
         }else{
-            this.addManagerButtons.forEach((b)=>{
-                b.toggleButton(false)
+            this.managers.forEach((m)=>{
+                m.label.setVisible(false)
+                m.speedButton.toggleButton(false)
+                m.multiplierButton.toggleButton(false)
+                m.addManagerButton.toggleButton(false)
+                //m.managerBar.toggleActive(false)
             })
+
         }
 
     }
