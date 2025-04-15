@@ -33,9 +33,9 @@ export class Shop {
         this.manager = true
         this.managerSpeed = 100;
         this.managerMultiplier = 0;
-        const managerOffset = 45
+        this.managerOffset = 45
         const managerHeight = size/8
-        this.managerCooldown = 1500
+        this.managerCooldown = 5000
         this.managerCooldownProgress = 0
 
         this.cooldown = 2500
@@ -44,14 +44,14 @@ export class Shop {
 
 
          
+
+        this.managerGrey = gameScene.add.image(x,y+this.managerOffset*sF,texture.managerGrey).setDisplaySize(size*sF,managerHeight*sF)
+        this.managerProgress = gameScene.add.image(x,y+this.managerOffset*sF,texture.managerProgress).setDisplaySize(size*sF,managerHeight*sF)
          
 
         this.greySprite = gameScene.add.image(x, y, texture.grey).setDisplaySize( 0,  0)
         this.progressSprite = gameScene.add.image(x, y, texture.progress).setDisplaySize( 0,  0).setInteractive();
 
-
-        this.managerGrey = gameScene.add.image(x,y+managerOffset*sF,texture.managerGrey).setDisplaySize(size*sF,managerHeight*sF)
-        this.managerProgress = gameScene.add.image(x,y+managerOffset*sF,texture.managerProgress).setDisplaySize(size*sF,managerHeight*sF)
 
         this.initialAnimation()
 
@@ -75,6 +75,8 @@ export class Shop {
                 this.collectMoney()
             }
         })
+
+        this.toggleManager(false)
     }
 
     managerCollect(){
@@ -82,10 +84,29 @@ export class Shop {
     }
 
     toggleManager(active){
-        if (!active) { return; }
+        let sF = this.gameScene.scale.width/1920
+
+
+        if (!active) { 
+            this.manager = false;
+            this.managerGrey.setVisible(false)
+            this.managerProgress.setVisible(false)
+            return;
+        }
+
+
         
         this.manager = true;
+        this.managerGrey.setVisible(true)
+        this.managerProgress.setVisible(true)
 
+        this.gameScene.tweens.add({
+            targets: [this.managerProgress, this.managerGrey],
+            y: {from:this.y, to:this.y+this.managerOffset*sF},
+            duration: 1200,
+            ease: "Bounce.Out"
+        })
+        console.log("enabled manager")
         return;
     }
 
