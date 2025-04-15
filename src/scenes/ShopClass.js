@@ -28,18 +28,30 @@ export class Shop {
         console.log(sC)
         this.amountOfPeople = sC.menuButtons.upgrade1.defaultValue
         this.cashierSpeed = sC.menuButtons.upgrade2.defaultValue
-        this.moneyMultiplier = sC.menuButtons.upgrade3.defaultValue
+        this.pricePerPerson = sC.menuButtons.upgrade3.defaultValue
+
+        this.manager = true
+        this.managerSpeed = 100;
+        this.managerMultiplier = 0;
+        this.managerOffset = 45
+        const managerHeight = size/8
+        this.managerCooldown = 5000
+        this.managerCooldownProgress = 0
 
         this.cooldown = 2500
         this.cooldownProgress = 0
-        this.pricePerPerson = 1;
 
 
          
+
+        this.managerGrey = gameScene.add.image(x,y+this.managerOffset*sF,texture.managerGrey).setDisplaySize(size*sF,managerHeight*sF)
+        this.managerProgress = gameScene.add.image(x,y+this.managerOffset*sF,texture.managerProgress).setDisplaySize(size*sF,managerHeight*sF)
          
 
         this.greySprite = gameScene.add.image(x, y, texture.grey).setDisplaySize( 0,  0)
         this.progressSprite = gameScene.add.image(x, y, texture.progress).setDisplaySize( 0,  0).setInteractive();
+
+
         this.initialAnimation()
 
         gameScene.events.emit('shopCreated', this)
@@ -58,10 +70,46 @@ export class Shop {
 
         this.progressSprite.on('pointerdown', () =>{
             if(this.cooldownProgress >= this.cooldown){
-                this.cooldownProgress = 0;
                 this.collectMoney()
             }
         })
+
+        this.toggleManager(false)
+    }
+
+    managerCollect(){
+        if (this.cooldownProgress >= this.cooldown){
+            this.collectMoney()
+            this.managerCooldownProgress = 0;
+        }
+        return;
+    }
+
+    toggleManager(active){
+        let sF = this.gameScene.scale.width/1920
+
+
+        if (!active) { 
+            this.manager = false;
+            this.managerGrey.setVisible(false)
+            this.managerProgress.setVisible(false)
+            return;
+        }
+
+
+        
+        this.manager = true;
+        this.managerGrey.setVisible(true)
+        this.managerProgress.setVisible(true)
+
+        this.gameScene.tweens.add({
+            targets: [this.managerProgress, this.managerGrey],
+            y: {from:this.y, to:this.y+this.managerOffset*sF},
+            duration: 1200,
+            ease: "Bounce.Out"
+        })
+        console.log("enabled manager")
+        return;
     }
 
     initialAnimation(){
@@ -73,15 +121,22 @@ export class Shop {
             displayHeight: sF*this.size,
             alpha: {from: 0.5, to:1},
             duration: 800,
-            ease: "Bounce.Out"
+            ease: "Bounce.Out",
+            onComplete: ()=>{        console.log(this.greySprite.displayWidth)}
         })
+        
 
     }
 
 
 
-    collectMoney(){
-        let mon = this.pricePerPerson*this.amountOfPeople*this.moneyMultiplier
+    collectMoney(isManager){
+        let m = 1
+        if(isManager){
+            m = this.managerMultiplier
+        }
+        this.cooldownProgress = 0;
+        let mon = this.amountOfPeople*this.pricePerPerson*m
         mon = Math.round(mon)
         this.gameScene.money += mon
         this.gameScene.input.setDefaultCursor('auto');

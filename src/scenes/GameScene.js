@@ -1,12 +1,12 @@
 import  { Shop } from './ShopClass.js';
-import { shopMenu,marketingMenu,managerMenu,worldMenu } from "./MenuClass.js";
+import { shopMenu,managerMenu } from "./MenuClass.js";
 import { prestigeMenuButton } from './ButtonClasses.js';
 
 export class GameScene extends Phaser.Scene {
     constructor(){
         super({ key: "GameScene", active: false })
 
-        this.money = 1000000;
+        this.money = 0;
 
         this.shopList = []
     }
@@ -56,9 +56,9 @@ export class GameScene extends Phaser.Scene {
         const iconSize = menuWidth/4;
 
         this.shopMenu = new shopMenu(this,menuWidth,iconSize)
-        this.marketingMenu = new marketingMenu(this,menuWidth,iconSize)
+        //this.marketingMenu = new marketingMenu(this,menuWidth,iconSize)
         this.managerMenu = new managerMenu(this,menuWidth,iconSize)
-        this.worldMenu = new worldMenu(this,menuWidth,iconSize)
+        //this.worldMenu = new worldMenu(this,menuWidth,iconSize)
 
         this.activeMenu = this.shopMenu 
         //--- Menu segment end ---//
@@ -112,10 +112,24 @@ export class GameScene extends Phaser.Scene {
             }
             const cropHeight = 1080 * shop.cooldownProgress/shop.cooldown;
             shop.progressSprite.setCrop(0,1080-cropHeight,1080,cropHeight)
+
+            if (shop.manager){
+                if(shop.managerCooldownProgress < shop.managerCooldown){
+                    shop.managerCooldownProgress += delta*(shop.managerSpeed/100)
+                }else if (shop.managerCooldownProgress >= shop.managerCooldown){
+                    shop.managerCollect()
+                }
+                const managerCropHeight = shop.managerProgress.width * shop.managerCooldownProgress/shop.managerCooldown
+
+                shop.managerProgress.setCrop(0,0,managerCropHeight,shop.managerProgress.height)
+            }
+
         })
 
         //Checks for if buttons needs to be greyed out.
         this.shopMenu.checkButtonLockState()
+
+        this.managerMenu.checkButtonLockState()
 
     
     }

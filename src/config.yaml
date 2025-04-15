@@ -15,7 +15,7 @@ priceConfig:
   
 
 popupConfig: #Config for the money popups in game
-  size: 12
+  size: 24
   angleVariance: 10
 
   positive: #When gaining money
@@ -39,6 +39,8 @@ shopConfig:
   texture:
     grey: 'nettoSpriteGrey'
     progress: 'nettoSprite'
+    managerGrey: 'managerGrey'
+    managerProgress: 'managerProgress'
   menuButtons:
     upgradeButtonScale: 0.5
     upgrade1:
@@ -56,6 +58,16 @@ shopConfig:
       defaultValue: 3
       valueIncrement: 3
       valueSuffix: ''
+    managerUpgrade1:
+      icon: 'speedIcon'
+      defaultValue: 100
+      valueIncrement: 5
+      valueSuffix: '%'
+    managerUpgrade2:
+      icon: 'multiplierIcon'
+      defaultValue: 1
+      valueIncrement: 0.05
+      valueSuffix: 'x'
 
 
 shops:
@@ -80,38 +92,33 @@ menu:
   contentPadding: 0 #Padding between objects in menu.
   initialOffset: 280 #The offset of contents from top of menu
 
-  menu1:
+  upgradeMenu:
     name: 'Butikker'
     icon: 'shopIcon' #Matching an asset name
-    index: 3 #Determines which slot it should be in.
+    index: 1 #Determines which slot it should be in.
     labelPadding: 40 #Padding between label and buttons
     labelSize: 35
     labelColor: '#ffffff' #Hex Value
     labelFontWeight: 'Medium' #Bold, SemiBold, Medium or Regular
   
-  menu2:
-    name: 'Marketing'
-    icon: 'marketingIcon'
-    index: 2
 
-  menu3:
+  managerMenu:
     name: 'Managers'
     icon: 'managerIcon'
-    index: 1
-  
-  menu4:
-    name: 'World'
-    icon: 'worldIcon'
     index: 0
+    labelPadding: 40 #Padding between label and buttons
+    labelSize: 35
+    labelColor: '#ffffff' #Hex Value
+    labelFontWeight: 'Medium' #Bold, SemiBold, Medium or Regular
+
+
 
 texture:
   shopButton:
     button: 'button'
     greyButton: 'greyButton'
-  
-  nettoSkin:
-    grey: 'nettoSpriteGrey'
-    progress: 'nettoSprite'
+
+
   
   addButton:
     button: 'addButton'
@@ -175,6 +182,10 @@ assets:
     path: "assets/UI/nettoSprite.png"
   - name: "nettoSpriteGrey"
     path: "assets/UI/nettoSpriteGray.png"
+  - name: "managerProgress"
+    path: "assets/UI/managerProgress.png"
+  - name: "managerGrey"
+    path: "assets/UI/managerGrey.png"
   
   # Buttons and Additional Assets
   - name: "button"
@@ -193,6 +204,10 @@ assets:
     path: "assets/UI/cashierIcon.png"
   - name: "coinHandIcon"
     path: "assets/UI/coinHandIcon.png"
+  - name: "speedIcon"
+    path: "assets/UI/speedIcon.png"
+  - name: "multiplierIcon"
+    path: "assets/UI/multiplierIcon.png"
 
   #UI stuff
   - name: "prestigeIcon"
