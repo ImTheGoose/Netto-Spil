@@ -79,8 +79,10 @@ export class Shop {
     }
 
     managerCollect(){
-        this.collectMoney()
-        this.managerCooldownProgress = 0;
+        if (this.cooldownProgress >= this.cooldown){
+            this.collectMoney()
+            this.managerCooldownProgress = 0;
+        }
         return;
     }
 
