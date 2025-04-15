@@ -40,7 +40,7 @@ export function moneyPopup(gameScene,x,y,amount,type,prevousPopup){
         fontFamily: "KodeMonoBold",
         color: color,
         stroke: stroke,
-        strokeThickness: 3,
+        strokeThickness: 6,
     }).setOrigin(0.5)
     
     let randomAngle = randomNumber(-config.angleVariance,config.angleVariance)
@@ -49,14 +49,14 @@ export function moneyPopup(gameScene,x,y,amount,type,prevousPopup){
         targets: moneyText,
         y: y-25*sF,
         angle: randomAngle,
-        scale:2,
+        scale:1,
         duration: 1200,
         ease: 'Cubic.Out',
         onComplete: () =>{
             gameScene.tweens.add({
                 targets: moneyText,
                 alpha:0,
-                scale:1.5,
+                scale:0.6,
                 duration: 600,
                 delay: 300,
                 ease: 'Cubic.In',

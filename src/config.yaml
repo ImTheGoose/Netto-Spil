@@ -15,7 +15,7 @@ priceConfig:
   
 
 popupConfig: #Config for the money popups in game
-  size: 12
+  size: 24
   angleVariance: 10
 
   positive: #When gaining money
