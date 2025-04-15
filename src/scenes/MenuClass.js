@@ -5,6 +5,8 @@ class Menu {
     constructor(gameScene,menuWidth,iconSize,menuConfig){
         const sF = gameScene.scale.width/1920
         const config = gameScene.config
+
+        this.sound = gameScene.sound.add("swoosh")
           
         this.buttons = [] //Buttons are double indexed. Meaning the "buttons" list consists of arrays, in which there are 3 buttons. 
 
@@ -47,6 +49,7 @@ class Menu {
                 this.toggleActive(true)
                 gameScene.activeMenu.toggleActive(false)
                 gameScene.activeMenu = this
+                this.sound.play({volume:2})
             }
         })
     }

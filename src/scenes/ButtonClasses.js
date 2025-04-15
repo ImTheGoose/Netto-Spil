@@ -1,3 +1,5 @@
+import { moneyPopup,PopupType } from "./Utils.js";
+
 export class Button{
     constructor(gameScene,config,texture){
         //Loads Data
@@ -14,6 +16,7 @@ export class Button{
         this.scale = config.scale
 
         this.sound = gameScene.sound.add("clickSound")
+        this.denySound = gameScene.sound.add("denySound")
 
         //Makes shorthands and quick adjustments
         const sF = gameScene.scale.width/1920*this.scale
@@ -53,14 +56,17 @@ export class Button{
             this.button.setTint(0x767676)
             this.accentButton.setTint(0x767676)
             this.offsetButtonPosition();
-            this.sound.play({volume:8})
+            this.playSound()
         })
 
         //On button release
         this.button.on('pointerup', () => {
+            let m = this.gameScene.moneyBackground
+
             if (this.buttonRequirements()){
                 console.log("button clicked")
-                this.gameScene.money -= this.price;
+                let paid = this.price;
+                this.gameScene.money -= paid;
                 this.timesBought += 1
                 this.price = this.calculatePrice()
                 
@@ -68,11 +74,22 @@ export class Button{
                 this.updateText()
                 this.callBack();
                 this.button.setTint(0xb4b4b4)
+                this.lastPopup = moneyPopup(this.gameScene,m.x+m.displayWidth/2,m.y-m.displayHeight,paid,PopupType.NEGATIVE,this.lastPopup)
             }else{
                 console.log("ikke nok penge")
+                this.lastPopup = moneyPopup(this.gameScene,m.x+m.displayWidth/2,m.y-m.displayHeight,this.price,PopupType.NEUTRAL,this.lastPopup)
             }
             this.resetButtonPosition()
         })
+    }
+
+    playSound(){
+        if (this.buttonRequirements()){
+            this.sound.play({volume:8})
+        }else{
+            this.denySound.play({volume:1.5})
+        }
+
     }
 
     calculatePrice(){
@@ -306,6 +323,7 @@ export class addButton extends Button{
     constructor(gameScene, config,title){
         super(gameScene,config,gameScene.config.texture.addButton)
         const sF = gameScene.scale.width/1920*this.scale
+        this.sound = gameScene.sound.add("purchaseSound")
 
         this.priceOffset = sF*30;
         this.titleOffset = sF*20
@@ -325,6 +343,7 @@ export class addButton extends Button{
         }).setOrigin(0.5,0.5)
         this.fitText(this.buttonPriceText, this.button.displayWidth)
     }
+
 
     calculatePrice(){
         let c = this.gameScene.config

@@ -14,6 +14,25 @@ priceConfig:
     requirementConstant: 5110
   
 
+popupConfig: #Config for the money popups in game
+  size: 12
+  angleVariance: 10
+
+  positive: #When gaining money
+    color: '#00b705'
+    stroke: "#006908"
+    prefix: '+'
+
+  negative: #When spending money
+    color: '#ff2e2e'
+    stroke: "#690000"
+    prefix: '-'
+
+  neutral: #When no money is transfered. Fx if you dont have enough
+    color: '#acacac'
+    stroke: "#000000"
+    prefix: ''
+
 shopConfig:
   size: 70
   maxUpgrades: 20
@@ -104,7 +123,13 @@ sounds:
   - name: "clickSound"
     path: "assets/Sounds/click.mp3"
   - name: "collectSound"
+    path: "assets/Sounds/collect2.mp3"
+  - name: "denySound"
+    path: "assets/Sounds/deny.mp3"
+  - name: "purchaseSound"
     path: "assets/Sounds/collect.mp3"
+  - name: "swoosh"
+    path: "assets/Sounds/swipe.mp3"
 
 #Fonts are looped in the GameScene and loaded from there.
 fonts:

@@ -1,3 +1,5 @@
+import { moneyPopup,PopupType } from "./Utils.js";
+
 export class NettoClass {
     constructor(image, imageGray){
         this.colorImage = image;
@@ -36,8 +38,9 @@ export class Shop {
          
          
 
-        this.greySprite = gameScene.add.image(x, y, texture.grey).setDisplaySize( sF*size,  sF*size)
-        this.progressSprite = gameScene.add.image(x, y, texture.progress).setDisplaySize( sF*size,  sF*size).setInteractive();
+        this.greySprite = gameScene.add.image(x, y, texture.grey).setDisplaySize( 0,  0)
+        this.progressSprite = gameScene.add.image(x, y, texture.progress).setDisplaySize( 0,  0).setInteractive();
+        this.initialAnimation()
 
         gameScene.events.emit('shopCreated', this)
 
@@ -61,6 +64,22 @@ export class Shop {
         })
     }
 
+    initialAnimation(){
+        let sF = this.gameScene.scale.width/1920
+
+        this.gameScene.tweens.add({
+            targets: [this.progressSprite,this.greySprite],
+            displayWidth: sF*this.size,
+            displayHeight: sF*this.size,
+            alpha: {from: 0.5, to:1},
+            duration: 800,
+            ease: "Bounce.Out"
+        })
+
+    }
+
+
+
     collectMoney(){
         let mon = this.pricePerPerson*this.amountOfPeople*this.moneyMultiplier
         mon = Math.round(mon)
@@ -68,5 +87,7 @@ export class Shop {
         this.gameScene.input.setDefaultCursor('auto');
         console.log("Indsamlede "+mon+"kr fra nettoen")
         this.sound.play({volume:1})
+        this.lastPopup = moneyPopup(this.gameScene,this.x,this.y-this.greySprite.displayHeight/2,mon,PopupType.POSITIVE, this.lastPopup)
+
     }
 }
