@@ -172,6 +172,10 @@ assets:
     path: "assets/UI/nettoSprite.png"
   - name: "nettoSpriteGrey"
     path: "assets/UI/nettoSpriteGray.png"
+  - name: "managerProgress"
+    path: "assets/UI/managerProgess.png"
+  - name: "managerGrey"
+    path: "assets/UI/managerGrey.png"
   
   # Buttons and Additional Assets
   - name: "button"
