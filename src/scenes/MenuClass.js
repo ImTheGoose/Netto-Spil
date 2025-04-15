@@ -7,8 +7,6 @@ class Menu {
         const config = gameScene.config
 
         this.sound = gameScene.sound.add("swoosh")
-          
-        this.buttons = [] //Buttons are double indexed. Meaning the "buttons" list consists of arrays, in which there are 3 buttons. 
 
         this.menuConfig = menuConfig
         this.active = false;
@@ -17,7 +15,7 @@ class Menu {
 
         //Inserts the icon background element, and set as inactive
         this.iconBackground = gameScene.add.image(gameScene.scale.width-menuConfig.index*iconSize,0,'inactiveMenuTab').setOrigin(1,0).setDisplaySize(iconSize,iconSize).setInteractive()
-        this.toggleActive(false)
+
 
         const iconX = this.iconBackground.x-iconSize/2 //Calculates center of the icon background
         const iconY = this.iconBackground.y+iconSize/2
@@ -56,15 +54,7 @@ class Menu {
 
     //Loops through all buttons in the menu, to check and update their lock state.
     checkButtonLockState(){
-        this.buttons.forEach(bb =>{
-            bb.forEach(b =>{
-                if (!b.buttonRequirements()){
-                    b.lock(true)
-                }else if (b.button.texture.key === b.texture.greyButton){
-                    b.lock(false)
-                }
-            })
-        })
+        return;
     }
 
     //Toggles if the menu is seen as active, both visually but also in terms of inputs.
@@ -72,23 +62,9 @@ class Menu {
         if (active){
             this.active = true
             this.iconBackground.setTexture('activeMenuTab')
-
-            //Toggles button visibility through built in function
-            this.buttons.forEach(bb => {
-                bb.forEach(b => {
-                    b.toggleButton(true)
-                })
-            });
         }else{
             this.active = false
             this.iconBackground.setTexture('inactiveMenuTab')
-            
-            //Toggles button visibility through built in function
-            this.buttons.forEach(bb => {
-                bb.forEach(b => {
-                    b.toggleButton(false)
-                })
-            });
         }
     }
 }
@@ -99,6 +75,7 @@ export class shopMenu extends Menu{
         const sF = gameScene.scale.width/1920 //Scaling
         const config = gameScene.config
 
+        this.buttons = [] //Buttons are double indexed. Meaning the "buttons" list consists of arrays, in which there are 3 buttons. 
         this.labels = []
         this.buttonHeight = 0; //Gets set when a button is created
         this.labelHeight = 0;
@@ -208,6 +185,15 @@ export class shopMenu extends Menu{
 
     checkButtonLockState(){
         super.checkButtonLockState()
+        this.buttons.forEach(bb =>{
+            bb.forEach(b =>{
+                if (!b.buttonRequirements()){
+                    b.lock(true)
+                }else if (b.button.texture.key === b.texture.greyButton){
+                    b.lock(false)
+                }
+            })
+        })
         if(this.addButton){
             console.log(this.addButton.price)
             if (!this.addButton.buttonRequirements()){
@@ -221,6 +207,14 @@ export class shopMenu extends Menu{
     toggleActive(active){
         super.toggleActive(active)
         if (active){
+            //Toggles button visibility through built in function
+            this.buttons.forEach(bb => {
+                bb.forEach(b => {
+                    if(b){
+                        b.toggleButton(true)
+                    }
+                })
+            });
             if (this.addButton){
                 this.addButton.toggleButton(true)
             }
@@ -230,6 +224,14 @@ export class shopMenu extends Menu{
                 });
             }
         }else{
+            //Toggles button visibility through built in function
+            this.buttons.forEach(bb => {
+                bb.forEach(b => {
+                    if (b){
+                        b.toggleButton(false)
+                    }
+                })
+            });
             if (this.addButton){
                 this.addButton.toggleButton(false)
             }
@@ -250,8 +252,8 @@ export class shopMenu extends Menu{
 export class marketingMenu extends Menu{
     constructor(gameScene,menuWidth,iconSize){
         super(gameScene,menuWidth,iconSize,gameScene.config.menu.menu2)
-        
 
+        this.toggleActive(false)
     }
 }
 
@@ -259,15 +261,52 @@ export class managerMenu extends Menu{
     constructor(gameScene,menuWidth,iconSize){
         super(gameScene,menuWidth,iconSize,gameScene.config.menu.menu3)
 
+        this.addManagerButtons = []
+
+        const config = gameScene.config
+
+        gameScene.events.on('shopCreated',(shop)=>{
+            let button = new addButton(gameScene,{
+                x:gameScene.scale.width-menuWidth/2,
+                y:400*(1+gameScene.shopList.length)+this.contentPadding,
+                scale: 0.5,
+                callBack:()=>{
+                    shop.toggleManager(true)
+                    button.disableButton()
+                }
+            },`Buy manager for ${config.shops[gameScene.shopList.length].name}`)
+
+
+            this.addManagerButtons.push(button)
+
+            if (!this.active){
+                this.toggleActive(false)
+            }
+        })
+
         this.toggleActive(true)
+    }
+
+    toggleActive(active){
+        super.toggleActive(active)
+        if(active){
+            this.addManagerButtons.forEach((b)=>{
+                b.toggleButton(true)
+            })
+        }else{
+            this.addManagerButtons.forEach((b)=>{
+                b.toggleButton(false)
+            })
+        }
 
     }
+    
 }
 
 export class worldMenu extends Menu{
     constructor(gameScene,menuWidth,iconSize,){
         super(gameScene,menuWidth,iconSize,gameScene.config.menu.menu4)
 
-
+        this.toggleActive(false)
     }
 }

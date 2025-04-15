@@ -30,6 +30,10 @@ export class Shop {
         this.cashierSpeed = sC.menuButtons.upgrade2.defaultValue
         this.moneyMultiplier = sC.menuButtons.upgrade3.defaultValue
 
+        this.manager = false
+        this.managerSpeed = 0;
+        this.managerMultiplier = 0;
+
         this.cooldown = 2500
         this.cooldownProgress = 0
         this.pricePerPerson = 1;
@@ -62,6 +66,14 @@ export class Shop {
                 this.collectMoney()
             }
         })
+    }
+
+    toggleManager(active){
+        if (!active) { return; }
+        
+        this.manager = true;
+
+        return;
     }
 
     initialAnimation(){

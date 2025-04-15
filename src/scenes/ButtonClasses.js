@@ -14,6 +14,7 @@ export class Button{
         this.valueIncrement = config.valueIncrement
         this.callBack = config.callBack
         this.scale = config.scale
+        this.disabled = false;
 
         this.sound = gameScene.sound.add("clickSound")
         this.denySound = gameScene.sound.add("denySound")
@@ -81,6 +82,16 @@ export class Button{
             }
             this.resetButtonPosition()
         })
+    }
+
+    disableButton(){
+        this.disabled = true;
+        this.toggleButton(this.button.visible)
+    }
+
+    enableButton(){
+        this.disabled = false
+        this.toggleButton(this.button.visible)
     }
 
     playSound(){
@@ -156,7 +167,7 @@ export class Button{
 
     //Toggle visibility of button
     toggleButton(active){
-        if (active){
+        if (active && !this.disabled){
             this.button.setVisible(true)
             this.button.setInteractive()
             this.accentButton.setVisible(true)
@@ -307,7 +318,7 @@ export class shopButton extends Button{
     //Toggles visibility of button and contents
     toggleButton(active){
         super.toggleButton(active)
-        if (active){
+        if (active && !this.disabled){
             this.icon.setVisible(true)
             this.buttonPriceText.setVisible(true)
             this.buttonValueText.setVisible(true)
@@ -390,7 +401,7 @@ export class addButton extends Button{
     //Toggles visibility of button and contents
     toggleButton(active){
         super.toggleButton(active)
-        if (active){
+        if (active && !this.disabled){
             this.buttonPriceText.setVisible(true)
             this.buttonTitleText.setVisible(true)
         }else{
