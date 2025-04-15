@@ -254,16 +254,10 @@ export class managerMenu extends Menu{
     constructor(gameScene,menuWidth,iconSize){
         super(gameScene,menuWidth,iconSize,gameScene.config.menu.managerMenu)
 
-        this.addManagerButtons = []
-
         const sF = gameScene.scale.width/1920 //Scaling
         const config = gameScene.config
 
         this.managers = []
-
-        this.labels = []
-        this.buttonHeight = 0; //Gets set when a button is created
-        this.labelHeight = 0;
         this.labelPadding = this.menuConfig.labelPadding*sF
 
 
@@ -279,7 +273,7 @@ export class managerMenu extends Menu{
                 fontFamily: `KodeMono${this.menuConfig.labelFontWeight}`,
             }).setOrigin(0.5,0.5)
 
-            this.labelHeight = label.displayHeight
+            let labelHeight = label.displayHeight
 
 
 
@@ -298,11 +292,10 @@ export class managerMenu extends Menu{
 
 
 
-            this.buttonHeight = speedButton.button.displayHeight
+            let buttonHeight = speedButton.button.displayHeight
 
-            let y = (this.buttonHeight+this.contentPadding)*gameScene.shopList.length+this.initialOffset+(this.labelHeight+this.labelPadding)*this.labels.length
-            label.y = y-(this.labelHeight+this.labelPadding)
-            this.labels.push(label)
+            let y = (buttonHeight+this.contentPadding)*gameScene.shopList.length+this.initialOffset+(labelHeight+this.labelPadding)*this.managers.length
+            label.y = y-(labelHeight+this.labelPadding)
 
             speedButton.updatePosition(null,y+this.contentPadding)
 
@@ -338,7 +331,6 @@ export class managerMenu extends Menu{
                 addManagerButton: button,
             })
 
-            this.addManagerButtons.push(button)
 
             this.toggleActive(this.active)
         })
