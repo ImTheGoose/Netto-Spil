@@ -126,6 +126,7 @@ texture:
   prestigeMenuButton:
     button: 'prestigeMenuButton'
     greyButton: 'prestigeMenuButton'
+
 sounds:
   - name: "clickSound"
     path: "assets/Sounds/click.mp3"
@@ -141,81 +142,72 @@ sounds:
 #Fonts are looped in the GameScene and loaded from there.
 fonts:
   - name: "KodeMonoRegular"    
-    path: "assets/KodeMono-Regular.ttf"
+    path: "assets/Fonts/KodeMono-Regular.ttf"
   - name: "KodeMonoMedium"    
-    path: "assets/KodeMono-Medium.ttf"
+    path: "assets/Fonts/KodeMono-Medium.ttf"
   - name: "KodeMonoSemiBold"    
-    path: "assets/KodeMono-SemiBold.ttf"
+    path: "assets/Fonts/KodeMono-SemiBold.ttf"
   - name: "KodeMonoBold"    
-    path: "assets/KodeMono-Bold.ttf"
+    path: "assets/Fonts/KodeMono-Bold.ttf"
   
 #Assets are looped in the GameScene and loaded from there.
 assets:
-  # General Menu Assets
-  - name: "menuBackground"
-    path: "assets/UI/menuBackdrop.png"
-  - name: "inactiveMenuTab"
-    path: "assets/UI/inactiveMenuTab.png"
-  - name: "activeMenuTab"
-    path: "assets/UI/activeMenuTab.png"
-  
-  # Menu Icons
-  - name: "shopIcon"
-    path: "assets/UI/shopIcon.png"
-  - name: "marketingIcon"
-    path: "assets/UI/marketingIcon.png"
-  - name: "managerIcon"
-    path: "assets/UI/managerIcon.png"
-  - name: "worldIcon"
-    path: "assets/UI/worldIcon.png"
-  
-  # Map, Buttons and Shops Assets
+  #Rebirth Assets
+  - name: "rebirthMenuButton"
+    path: "assets/RebirthMenu/rebirthMenuButton.png"
+  - name: "rebirthIcon"
+    path: "assets/RebirthMenu/rebirthIcon.png"
+
+  #Shop Assets
+  - name: "managerProgress"
+    path: "assets/Shops/managerProgress.png"
+  - name: "managerGrey"
+    path: "assets/Shops/managerGrey.png"
+  - name: "nettoSprite"
+    path: "assets/Shops/nettoSprite.png"
+  - name: "nettoSpriteGrey"
+    path: "assets/Shops/nettoSpriteGray.png"
+
+  # General Assets
   - name: "map"
     path: "assets/DK-Kort.png"
-  - name: "testB"
-    path: "assets/UI/testButton.png"
-  - name: "testBDown"
-    path: "assets/UI/testButtonDown.png"
-  - name: "testBLocked"
-    path: "assets/UI/testButtonLocked.png"
-  - name: "nettoSprite"
-    path: "assets/UI/nettoSprite.png"
-  - name: "nettoSpriteGrey"
-    path: "assets/UI/nettoSpriteGray.png"
-  - name: "managerProgress"
-    path: "assets/UI/managerProgress.png"
-  - name: "managerGrey"
-    path: "assets/UI/managerGrey.png"
-  
-  # Buttons and Additional Assets
-  - name: "button"
-    path: "assets/UI/button.png"
-  - name: "greyButton"
-    path: "assets/UI/greyButton.png"
-  - name: "addButton"
-    path: "assets/UI/addButton.png"
-  - name: "addButtonGrey"
-    path: "assets/UI/addButtonGrey.png"
-  
-  # Button Icons
-  - name: "customerIcon"
-    path: "assets/UI/customerIcon.png"
-  - name: "cashierIcon"
-    path: "assets/UI/cashierIcon.png"
-  - name: "coinHandIcon"
-    path: "assets/UI/coinHandIcon.png"
-  - name: "speedIcon"
-    path: "assets/UI/speedIcon.png"
-  - name: "multiplierIcon"
-    path: "assets/UI/multiplierIcon.png"
 
-  #UI stuff
-  - name: "prestigeIcon"
-    path: "assets/UI/prestigeIcon.png"
+  #UI Assets
   - name: "coin"
     path: "assets/UI/coin.png"
   - name: "moneyBackground"
     path: "assets/UI/moneyBackground.png"
-  - name: "prestigeMenuButton"
-    path: "assets/UI/prestigeButton.png"
 
+  #Menu Assets
+  # General Menu Assets
+  - name: "menuBackground"
+    path: "assets/Menu/menuBackground.png"
+  - name: "inactiveMenuTab"
+    path: "assets/Menu/inactiveMenuTab.png"
+  - name: "activeMenuTab"
+    path: "assets/Menu/activeMenuTab.png"
+
+  - name: "shopIcon"
+    path: "assets/Menu/shopIcon.png"
+  - name: "managerIcon"
+    path: "assets/Menu/managerIcon.png"
+
+  - name: "button"
+    path: "assets/Menu/button.png"
+  - name: "greyButton"
+    path: "assets/Menu/greyButton.png"
+  - name: "addButton"
+    path: "assets/Menu/addButton.png"
+  - name: "addButtonGrey"
+    path: "assets/Menu/addButtonGrey.png"
+  
+  - name: "customerIcon"
+    path: "assets/Menu/customerIcon.png"
+  - name: "cashierIcon"
+    path: "assets/Menu/cashierIcon.png"
+  - name: "coinHandIcon"
+    path: "assets/Menu/coinHandIcon.png"
+  - name: "speedIcon"
+    path: "assets/Menu/speedIcon.png"
+  - name: "multiplierIcon"
+    path: "assets/Menu/multiplierIcon.png"
