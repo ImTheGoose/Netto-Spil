@@ -7,7 +7,7 @@ priceConfig:
     priceFactor: 2.5
     priceConstant: 5000
 
-  rebirth: #Rebirth contents are calculated as constant*factor^rebirthNum
+  prestige: #Prestige contents are calculated as constant*factor^rebirthNum
     multiplierFactor: 1.5
     multiplierConstant: 1
     requirementFactor: 1.65
@@ -126,6 +126,9 @@ texture:
   prestigeMenuButton:
     button: 'prestigeMenuButton'
     greyButton: 'prestigeMenuButton'
+  prestigeButton:
+    button: 'prestigeButton'
+    greyButton: 'prestigeButtonGrey'
 
 sounds:
   - name: "clickSound"
@@ -159,6 +162,18 @@ assets:
     path: "assets/PrestigeMenu/prestigeIcon.png"
   - name: "prestigeMenuBackground"
     path: "assets/PrestigeMenu/prestigeMenuBackground.png"
+  - name: "prestigeButton"
+    path: "assets/PrestigeMenu/prestigeButton.png"
+  - name: "prestigeButtonGrey"
+    path: "assets/PrestigeMenu/prestigeButtonGrey.png"
+  - name: "prestigeProgress"
+    path: "assets/PrestigeMenu/prestigeProgress.png"
+  - name: "prestigeProgressGrey"
+    path: "assets/PrestigeMenu/prestigeProgressGrey.png"
+  - name: "prestigeArrow"
+    path: "assets/PrestigeMenu/prestigeArrow.png"
+  - name: "fadedBackground"
+    path: "assets/PrestigeMenu/fadedBackground.png"
 
   #Shop Assets
   - name: "managerProgress"

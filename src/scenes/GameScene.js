@@ -1,6 +1,8 @@
 import  { Shop } from './ShopClass.js';
-import { shopMenu,managerMenu } from "./MenuClass.js";
-import { prestigeMenuButton } from './ButtonClasses.js';
+import { ShopMenu } from './Menus/ShopMenu.js';
+import { ManagerMenu } from './Menus/ManagerMenu.js';
+import { PrestigeMenuButton } from './Buttons/PrestigeMenuButton.js';
+import { PrestigeMenu } from './PrestigeMenu.js';
 
 export class GameScene extends Phaser.Scene {
     constructor(){
@@ -55,15 +57,15 @@ export class GameScene extends Phaser.Scene {
         const menuWidth = this.backgroundImage.displayWidth
         const iconSize = menuWidth/4;
 
-        this.shopMenu = new shopMenu(this,menuWidth,iconSize)
+        this.shopMenu = new ShopMenu(this,menuWidth,iconSize)
         //this.marketingMenu = new marketingMenu(this,menuWidth,iconSize)
-        this.managerMenu = new managerMenu(this,menuWidth,iconSize)
+        this.managerMenu = new ManagerMenu(this,menuWidth,iconSize)
         //this.worldMenu = new worldMenu(this,menuWidth,iconSize)
 
         this.activeMenu = this.shopMenu 
         //--- Menu segment end ---//
 
-        this.prestigeMenuButton = new prestigeMenuButton(this,{
+        this.prestigeMenuButton = new PrestigeMenuButton(this,{
             x: this.scale.width-menuWidth-100*sF,
             y: this.scale.height-100*sF,
             price: 0,
@@ -71,6 +73,8 @@ export class GameScene extends Phaser.Scene {
             scale: 0.25,
             callBack:() => {}
         })
+
+        this.prestigeMenu = new PrestigeMenu(this)
 
 
         //Adds the starter shop.
@@ -130,6 +134,8 @@ export class GameScene extends Phaser.Scene {
         this.shopMenu.checkButtonLockState()
 
         this.managerMenu.checkButtonLockState()
+
+        this.prestigeMenu.updatePrestigeMenu()
 
     
     }
