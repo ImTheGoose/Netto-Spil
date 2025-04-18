@@ -15,6 +15,7 @@ export class Button{
         this.callBack = config.callBack
         this.scale = config.scale
         this.disabled = false;
+        this.pressed = false;
 
         this.sound = gameScene.sound.add("clickSound")
         this.denySound = gameScene.sound.add("denySound")
@@ -54,6 +55,7 @@ export class Button{
 
         //On button press
         this.button.on('pointerdown', () => {
+            this.pressed = true
             this.button.setTint(0x767676)
             this.accentButton.setTint(0x767676)
             this.offsetButtonPosition();
@@ -61,7 +63,9 @@ export class Button{
         })
 
         //On button release
-        this.button.on('pointerup', () => {
+        this.gameScene.input.on('pointerup', () => {
+            if (!this.pressed) { return; }
+            this.pressed = false
             let m = this.gameScene.moneyBackground
 
             if (this.buttonRequirements()){
