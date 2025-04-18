@@ -20,8 +20,8 @@ export class Button{
         this.accentOffset = sF*15;
         this.fitTextPadding = sF*20
 
-        this.accentButton = gameScene.add.image(this.x,this.y+this.accentOffset,this.texture.button).setScale(sF*0.95).setAlpha(0.7)
-        this.button = gameScene.add.image(this.x,this.y,this.texture.button).setInteractive().setScale(sF*0.95)
+        this.accentButton = gameScene.add.image(this.x,this.y+this.accentOffset,this.texture.button).setScale(sF).setAlpha(0.7)
+        this.button = gameScene.add.image(this.x,this.y,this.texture.button).setInteractive().setScale(sF)
 
         //Input events
         this.button.on('pointerover', () => { this.onHover() })
@@ -59,6 +59,7 @@ export class Button{
     }
 
     onPointerUp(){
+        this.callBack()
         this.resetButtonPosition()
         this.button.setTint(0xb4b4b4)
     }
@@ -114,6 +115,7 @@ export class Button{
 
 
     fitText(textObject, maxWidth){
+        textObject.style.fontSize *= 2 //Makes sure that if text should be larger, it will also fit it.
         while (textObject.displayWidth > maxWidth-this.fitTextPadding) { //Decreases text size until displayWidth is within max width.
             let currentSize = parseInt(textObject.style.fontSize, 10);
             textObject.setFontSize(currentSize - 1);
@@ -135,8 +137,8 @@ export class Button{
     }
 
     //Toggle visibility of button
-    toggleButton(active){
-        if (active && !this.disabled){
+    toggleButton(isActive){
+        if (isActive && !this.disabled){
             this.button.setVisible(true)
             this.button.setInteractive()
             this.accentButton.setVisible(true)
