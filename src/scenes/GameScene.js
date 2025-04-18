@@ -6,7 +6,7 @@ export class GameScene extends Phaser.Scene {
     constructor(){
         super({ key: "GameScene", active: false })
 
-        this.money = 0;
+        this.money = 69420;
 
         this.shopList = []
     }
