@@ -153,10 +153,12 @@ fonts:
 #Assets are looped in the GameScene and loaded from there.
 assets:
   #Rebirth Assets
-  - name: "rebirthMenuButton"
-    path: "assets/RebirthMenu/rebirthMenuButton.png"
-  - name: "rebirthIcon"
-    path: "assets/RebirthMenu/rebirthIcon.png"
+  - name: "prestigeMenuButton"
+    path: "assets/PrestigeMenu/prestigeMenuButton.png"
+  - name: "prestigeIcon"
+    path: "assets/PrestigeMenu/prestigeIcon.png"
+  - name: "prestigeMenuBackground"
+    path: "assets/PrestigeMenu/prestigeMenuBackground.png"
 
   #Shop Assets
   - name: "managerProgress"
