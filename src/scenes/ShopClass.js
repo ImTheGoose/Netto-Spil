@@ -135,7 +135,7 @@ export class Shop {
             m = this.managerMultiplier
         }
         this.cooldownProgress = 0;
-        let mon = this.amountOfPeople*this.pricePerPerson*m
+        let mon = this.amountOfPeople*this.pricePerPerson*m*this.gameScene.prestigeMenu.getMultiplier()
         mon = Math.round(mon)
         this.gameScene.money += mon
         this.gameScene.input.setDefaultCursor('auto');
@@ -143,5 +143,14 @@ export class Shop {
         this.sound.play({volume:1})
         this.lastPopup = moneyPopup(this.gameScene,this.x,this.y-this.greySprite.displayHeight/2,mon,PopupType.POSITIVE, this.lastPopup)
 
+    }
+
+    destroy(){
+        this.progressSprite.destroy()
+        this.greySprite.destroy()
+        this.managerGrey.destroy()
+        this.managerProgress.destroy()
+        this.sound.destroy()
+        console.log(`Successfully destroyed shop: ${this.shopNum}`)
     }
 }

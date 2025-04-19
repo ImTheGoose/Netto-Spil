@@ -31,6 +31,14 @@ export class ShopButton extends Button{
         this.updateButtonContents()
     }
 
+    destroy(){
+        super.destroy()
+        this.buttonValueText.destroy()
+        this.buttonPriceText.destroy()
+        this.icon.destroy()
+        this.assignedShop = null
+    }
+
     onPointerUp(){
         super.onPointerUp()
         const m = this.gameScene.moneyBackground

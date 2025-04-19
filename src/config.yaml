@@ -91,16 +91,16 @@ shops:
     x: 550
     y: 100
 
-  - name: "Butik 5 (Skagen)"
-    x: 550
-    y: 100
+  - name: "Butik 5 (din mor)"
+    x: 300
+    y: 900
 
-  - name: "Butik 6 (Skagen)"
-    x: 550
-    y: 100
+  - name: "Butik 6 (din far)"
+    x: 600
+    y: 700
 
-  - name: "Butik 7 (Skagen)"
-    x: 550
+  - name: "Butik 7 (Skåne)"
+    x: 1200
     y: 100
 
 

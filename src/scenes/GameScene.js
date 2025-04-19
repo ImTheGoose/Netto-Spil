@@ -76,14 +76,7 @@ export class GameScene extends Phaser.Scene {
 
 
         //Adds the starter shop.
-        const startShop = this.cache.json.get('config').shops[0]
-        const defShop = this.cache.json.get('config').shopConfig
-        this.shopList.push(new Shop(
-            this,
-            startShop.x*sF, 
-            startShop.y*sF, 
-            defShop.size, 
-            defShop.texture,0))
+        this.createDefaultShop()
         
 
             
@@ -94,10 +87,36 @@ export class GameScene extends Phaser.Scene {
 
     //Function for making text fit withing a area
     fitText(textObject, maxWidth){
+        textObject.setFontSize(100)
         while (textObject.displayWidth > maxWidth-this.fitTextPadding) {
             let currentSize = parseInt(textObject.style.fontSize, 10);
             textObject.setFontSize(currentSize - 1);
         }
+    }
+
+    prestige(){
+        this.shopList.forEach((shop)=>{
+            shop.destroy()
+        })
+        this.shopList = []
+        this.shopMenu.resetMenu()
+        this.managerMenu.resetMenu()
+        this.managerMenu.toggleActive(false)
+        this.shopMenu.toggleActive(true)
+        this.activeMenu = this.shopMenu
+        this.createDefaultShop()
+    }
+
+    createDefaultShop(){
+        const startShop = this.cache.json.get('config').shops[0]
+        const defShop = this.cache.json.get('config').shopConfig
+        const sF = this.scale.width/1920
+        this.shopList.push(new Shop(
+            this,
+            startShop.x*sF, 
+            startShop.y*sF, 
+            defShop.size, 
+            defShop.texture,0))
     }
 
     update(time, delta) {

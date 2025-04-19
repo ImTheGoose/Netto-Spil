@@ -114,12 +114,12 @@ export class Menu {
     updateContentPosition() { return; }
 
     toggleActive(isActive){
+        this.scrollIndicator.setVisible(false)
         if (isActive){
             this.updateScroll(0)
             this.active = true
             this.iconBackground.setTexture('activeMenuTab')
         }else{
-            this.scrollIndicator.setVisible(false)
             this.active = false
             this.iconBackground.setTexture('inactiveMenuTab')
         }

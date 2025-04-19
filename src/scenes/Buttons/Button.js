@@ -156,4 +156,11 @@ export class Button{
         }
 
     }
+
+    destroy(){
+        this.button.destroy()
+        this.accentButton.destroy()
+        this.sound.destroy()
+        this.denySound.destroy()
+    }
 }

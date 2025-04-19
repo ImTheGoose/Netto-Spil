@@ -103,7 +103,7 @@ export class PrestigeMenu {
 
         const mult = priceConfig.multiplierConstant * (priceConfig.multiplierFactor ** prestigeNumber)
 
-        return mult;
+        return Math.round(mult*10)/10;
     }
 
     getRequirments(prestigeNumber){
@@ -113,7 +113,7 @@ export class PrestigeMenu {
 
         const req = priceConfig.requirementConstant * (priceConfig.requirementFactor ** prestigeNumber)
 
-        return req;
+        return Math.round(req);
     }
 
     canPrestige(){
@@ -124,11 +124,12 @@ export class PrestigeMenu {
     }
     
     completePrestige(){
-        console.log("attempted rebirth")
+        console.log("attempting Prestige")
         const m = this.gameScene.moneyBackground
         moneyPopup(this.gameScene,m.x+m.displayWidth/2,m.y-m.displayHeight,this.gameScene.money,PopupType.NEGATIVE)
         this.gameScene.money = 0;
         this.currentPrestigeNumber++
+        this.gameScene.prestige()
         console.log("Prestige completed")
         return;
         

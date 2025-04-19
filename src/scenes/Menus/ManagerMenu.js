@@ -52,7 +52,7 @@ export class ManagerMenu extends Menu {
                 button3.disableButton()
                 this.toggleActive(this.active)
             }
-        },"Køb manager")
+        },"Køb manager",shop.shopNum)
 
         return {
             label: label,
@@ -105,6 +105,18 @@ export class ManagerMenu extends Menu {
             m.addButton.updatePosition(x,by)
 
         }
+    }
+
+    resetMenu(){
+        this.managers.forEach((m)=>{
+            m.label.destroy()
+            m.button1.destroy()
+            m.button2.destroy()
+            m.addButton.destroy()
+        })
+        this.managers = []
+        this.scroll = this.minScroll
+        console.log("Successfully reset Manager Menu")
     }
 
     updateContents(){

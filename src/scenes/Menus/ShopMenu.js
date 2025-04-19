@@ -24,13 +24,15 @@ export class ShopMenu extends Menu{
                     defaultShop.texture,
                     gameScene.shopList.length))
                 
+                this.addButton.shopNum++
+                
                 this.updateScroll(0)
                 if (this.gameScene.config.shops.length <= this.gameScene.shopList.length){
+                    this.addButton.disableButton()
                     this.addButton.toggleButton(false)
-                    this.addButton = null
                 }
              }
-        },"Køb ny Butik")
+        },"Køb ny Butik",0)
 
         gameScene.events.on("shopCreated", (shop) =>{
             this.shops.push(this.addShopUpgrades(shop))
@@ -42,12 +44,26 @@ export class ShopMenu extends Menu{
         this.toggleActive(true)
     }
 
+    resetMenu(){
+        this.shops.forEach((s)=>{
+            s.label.destroy()
+            s.button1.destroy()
+            s.button2.destroy()
+            s.button3.destroy()
+        })
+        this.shops = []
+        this.addButton.enableButton()
+        this.addButton.shopNum = 0
+        this.scroll = this.minScroll
+        console.log("Successfully reset Shop Menu")
+    }
+
 
     getContentHeight(){
         if (!this.shops[0]) { return 0; }
         let contentHeight = this.shops[0].label.displayHeight+this.shops[0].button2.button.displayHeight+this.contentPadding+this.labelPadding
         contentHeight *= this.shops.length
-        if (this.addButton) {
+        if (!this.addButton.disabled) {
             contentHeight += this.addButton.button.displayHeight
         }
 
@@ -132,14 +148,14 @@ export class ShopMenu extends Menu{
             s.button2.updatePosition(x,bY)
             s.button3.updatePosition(x+xOffset,bY)
         }
-        if(this.addButton){
+        if(!this.addButton.disabled){
             const y = heightPerShop*this.shops.length+this.scroll
             this.addButton.updatePosition(x,y)
         }
     }
 
     updateContents(){
-        if (this.addButton){
+        if (!this.addButton.disabled){
             this.addButton.updateButtonContents()
         }
         this.shops.forEach((s)=>{
@@ -151,7 +167,7 @@ export class ShopMenu extends Menu{
 
     toggleActive(isActive){
         super.toggleActive(isActive)
-        if (this.addButton) {
+        if (!this.addButton.disabled) {
             this.addButton.toggleButton(isActive)
         }
         this.shops.forEach((s)=>{
