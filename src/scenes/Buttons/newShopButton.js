@@ -35,9 +35,10 @@ export class ShopButton extends Button{
         super.onPointerUp()
         const m = this.gameScene.moneyBackground
         if(!this.canUseButton()){
-            this.lastPopup = moneyPopup(this.gameScene,m.x+m.displayWidth/2,m.y-m.displayHeight,this.price,PopupType.NEUTRAL,this.lastPopup)
+            this.lastPopup = moneyPopup(this.gameScene,m.x+m.displayWidth/2,m.y-m.displayHeight,this.getPrice(),PopupType.NEUTRAL,this.lastPopup)
+            return;
         }
-        this.lastPopup = moneyPopup(this.gameScene,m.x+m.displayWidth/2,m.y-m.displayHeight,paid,PopupType.NEGATIVE,this.lastPopup)
+        this.lastPopup = moneyPopup(this.gameScene,m.x+m.displayWidth/2,m.y-m.displayHeight,this.getPrice(),PopupType.NEGATIVE,this.lastPopup)
         this.gameScene.money -= this.getPrice()
         this.value = Math.round((this.value+this.valueIncrement) * 100) / 100;
         this.timesBought += 1;
@@ -59,6 +60,7 @@ export class ShopButton extends Button{
     }
 
     updateButtonContents(){
+        super.updateButtonContents()
         this.buttonPriceText.text = `${this.getPrice()}kr`
         this.fitText(this.buttonPriceText,this.button.displayWidth)
 
@@ -79,8 +81,8 @@ export class ShopButton extends Button{
             this.buttonPriceText.y = y+this.priceOffset
         }
         if (x){
-            this.buttonValueText.x = x+this.xOffset
-            this.icon.x = x-this.xOffset*2
+            this.buttonValueText.x = x+this.getXOffset()
+            this.icon.x = x-this.getXOffset()
             this.buttonPriceText.x = x
         }
     }
@@ -105,5 +107,5 @@ export class ShopButton extends Button{
         this.icon.setVisible(isActive)
         this.buttonPriceText.setVisible(isActive)
         this.buttonValueText.setVisible(isActive)
-    }
+        }
 }

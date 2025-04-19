@@ -1,14 +1,14 @@
 import  { Shop } from './ShopClass.js';
-import { ShopMenu } from './Menus/ShopMenu.js';
-import { ManagerMenu } from './Menus/ManagerMenu.js';
-import { PrestigeMenuButton } from './Buttons/PrestigeMenuButton.js';
+import { ShopMenu } from './Menus/newShopMenu.js';
+import { ManagerMenu } from './Menus/newManagerMenu.js';
+import { PrestigeMenuButton } from './Buttons/newPrestigeMenuButton.js';
 import { PrestigeMenu } from './PrestigeMenu.js';
 
 export class GameScene extends Phaser.Scene {
     constructor(){
         super({ key: "GameScene", active: false })
 
-        this.money = 69420;
+        this.money = 9999999999999;
 
         this.shopList = []
     }
@@ -57,9 +57,9 @@ export class GameScene extends Phaser.Scene {
         const menuWidth = this.backgroundImage.displayWidth
         const iconSize = menuWidth/4;
 
-        this.shopMenu = new ShopMenu(this,menuWidth,iconSize)
+        this.shopMenu = new ShopMenu(this,iconSize)
         //this.marketingMenu = new marketingMenu(this,menuWidth,iconSize)
-        this.managerMenu = new ManagerMenu(this,menuWidth,iconSize)
+        this.managerMenu = new ManagerMenu(this,iconSize)
         //this.worldMenu = new worldMenu(this,menuWidth,iconSize)
 
         this.activeMenu = this.shopMenu 
@@ -68,8 +68,6 @@ export class GameScene extends Phaser.Scene {
         this.prestigeMenuButton = new PrestigeMenuButton(this,{
             x: this.scale.width-menuWidth-100*sF,
             y: this.scale.height-100*sF,
-            price: 0,
-            priceMultiplier: 0,
             scale: 0.25,
             callBack:() => {}
         })
@@ -85,7 +83,7 @@ export class GameScene extends Phaser.Scene {
             startShop.x*sF, 
             startShop.y*sF, 
             defShop.size, 
-            defShop.texture,1))
+            defShop.texture,0))
         
 
             
@@ -131,9 +129,10 @@ export class GameScene extends Phaser.Scene {
         })
 
         //Checks for if buttons needs to be greyed out.
-        this.shopMenu.checkButtonLockState()
+        this.shopMenu.updateContents()
+        this.managerMenu.updateContents()
 
-        this.managerMenu.checkButtonLockState()
+        //this.managerMenu.checkButtonLockState()
 
         this.prestigeMenu.updatePrestigeMenu()
 

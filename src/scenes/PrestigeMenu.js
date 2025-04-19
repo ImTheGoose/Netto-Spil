@@ -1,4 +1,5 @@
-import { PrestigeButton } from "./Buttons/PrestigeButton.js";
+import { PrestigeButton } from "./Buttons/newPrestigeButton.js";
+import { moneyPopup,PopupType } from "./Utils.js"
 
 export class PrestigeMenu {
     constructor(gameScene){
@@ -58,10 +59,7 @@ export class PrestigeMenu {
             x: x,
             y: y+prestigeButtonOffset,
             scale: 1/this.scale,
-            callBack: () =>{
-                this.completePrestige()
-                return;
-            }
+            callBack: () =>{ }
         })
 
         this.prestigeButton.setDepth(10)
@@ -79,7 +77,7 @@ export class PrestigeMenu {
 
         this.subText.text = `Du har ${this.gameScene.money} kr / ${this.getRequirments()} kr`
 
-        this.prestigeButton.lock(!this.prestigeButton.buttonRequirements())
+        this.prestigeButton.locked(!this.prestigeButton.canUseButton())
 
         return;
     }
@@ -118,7 +116,7 @@ export class PrestigeMenu {
         return req;
     }
 
-    isPrestigeRequirementsMet(){
+    canPrestige(){
         if (this.gameScene.money > this.getRequirments()){
             return true;
         }
@@ -127,10 +125,13 @@ export class PrestigeMenu {
     
     completePrestige(){
         console.log("attempted rebirth")
+        const m = this.gameScene.moneyBackground
+        moneyPopup(this.gameScene,m.x+m.displayWidth/2,m.y-m.displayHeight,this.gameScene.money,PopupType.NEGATIVE)
         this.gameScene.money = 0;
         this.currentPrestigeNumber++
         console.log("Prestige completed")
         return;
+        
     }
 
 }

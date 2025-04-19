@@ -35,10 +35,11 @@ export class PrestigeButton extends Button{
     }
 
     canUseButton(){
-        return this.gameScene.prestigeMenu.isPrestigeRequirementsMet();
+        return this.gameScene.prestigeMenu.canPrestige();
     }
 
     onPointerUp(){
-        if(this.canUseButton){ this.gameScene.prestigeMenu.completePrestige() }
+        super.onPointerUp()
+        if(this.canUseButton()){ this.gameScene.prestigeMenu.completePrestige() }
     }
 }

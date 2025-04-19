@@ -10,6 +10,7 @@ export class PrestigeMenuButton extends Button{
     }
 
     onPointerUp(){
+        super.onPointerUp()
         this.gameScene.prestigeMenu.toggleMenu(true)
     }
 

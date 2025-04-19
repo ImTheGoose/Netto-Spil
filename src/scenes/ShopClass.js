@@ -24,15 +24,14 @@ export class Shop {
 
         this.shopNum = shopNum
 
-        let sC = gameScene.config.shopConfig
-        console.log(sC)
-        this.amountOfPeople = sC.menuButtons.upgrade1.defaultValue
-        this.cashierSpeed = sC.menuButtons.upgrade2.defaultValue
-        this.pricePerPerson = sC.menuButtons.upgrade3.defaultValue
+        this.shopConfig = gameScene.config.shopConfig
+        this.amountOfPeople = this.shopConfig.menuButtons.upgrade1.defaultValue
+        this.cashierSpeed = this.shopConfig.menuButtons.upgrade2.defaultValue
+        this.pricePerPerson = this.shopConfig.menuButtons.upgrade3.defaultValue
 
         this.manager = true
         this.managerSpeed = 100;
-        this.managerMultiplier = 0;
+        this.managerMultiplier = 1;
         this.managerOffset = 45
         const managerHeight = size/8
         this.managerCooldown = 5000
@@ -79,7 +78,7 @@ export class Shop {
 
     managerCollect(){
         if (this.cooldownProgress >= this.cooldown){
-            this.collectMoney()
+            this.collectMoney(true)
             this.managerCooldownProgress = 0;
         }
         return;

@@ -20,8 +20,8 @@ export class Button{
         this.accentOffset = sF*15;
         this.fitTextPadding = sF*20
 
-        this.accentButton = gameScene.add.image(this.x,this.y+this.accentOffset,this.texture.button).setScale(sF).setAlpha(0.7)
-        this.button = gameScene.add.image(this.x,this.y,this.texture.button).setInteractive().setScale(sF)
+        this.accentButton = gameScene.add.image(this.x,this.y+this.accentOffset,this.texture.button).setScale(sF*0.95).setAlpha(0.7)
+        this.button = gameScene.add.image(this.x,this.y,this.texture.button).setInteractive().setScale(sF*0.95)
 
         //Input events
         this.button.on('pointerover', () => { this.onHover() })
@@ -36,17 +36,17 @@ export class Button{
     }
 
     onHover(){
-        if (this.gameScene.money >= this.price){
+        if (this.canUseButton()){
             this.button.setTint(0xb4b4b4)
             this.accentButton.setTint(0xb4b4b4)
-            gameScene.input.setDefaultCursor('pointer');
+            this.gameScene.input.setDefaultCursor('pointer');
         }
     }
 
     onHoverLeave(){
         this.button.clearTint()
         this.accentButton.clearTint()
-        gameScene.input.setDefaultCursor('auto');
+        this.gameScene.input.setDefaultCursor('auto');
     }
 
 
@@ -58,10 +58,13 @@ export class Button{
         this.playSound()
     }
 
-    onPointerUp(){
-        this.callBack()
+    onPointerUp(byPassCallback){
         this.resetButtonPosition()
         this.button.setTint(0xb4b4b4)
+        if (byPassCallback) {
+            return
+        }
+        this.callBack()
     }
 
     setDepth(depth){
@@ -80,7 +83,7 @@ export class Button{
     }
 
     playSound(){
-        if (this.buttonRequirements()){
+        if (this.canUseButton()){
             this.sound.play({volume:8})
         }else{
             this.denySound.play({volume:1.5})
@@ -90,6 +93,10 @@ export class Button{
     //Default requirement for button press.
     canUseButton(){
         return true;
+    }
+
+    updateButtonContents(){
+        this.locked(!this.canUseButton())
     }
 
     //Toggles visual lock state

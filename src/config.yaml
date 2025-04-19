@@ -13,6 +13,10 @@ priceConfig:
     requirementFactor: 1.65
     requirementConstant: 5110
   
+scrollConfig:
+  scrollSpeed: 1
+  scrollIndicator: true
+  scrollindicatorPadding: 20
 
 popupConfig: #Config for the money popups in game
   size: 24
@@ -87,6 +91,19 @@ shops:
     x: 550
     y: 100
 
+  - name: "Butik 5 (Skagen)"
+    x: 550
+    y: 100
+
+  - name: "Butik 6 (Skagen)"
+    x: 550
+    y: 100
+
+  - name: "Butik 7 (Skagen)"
+    x: 550
+    y: 100
+
+
 
 menu:
   contentPadding: 0 #Padding between objects in menu.
@@ -96,7 +113,7 @@ menu:
     name: 'Butikker'
     icon: 'shopIcon' #Matching an asset name
     index: 1 #Determines which slot it should be in.
-    labelPadding: 40 #Padding between label and buttons
+    labelPadding: 60 #Padding between label and buttons
     labelSize: 35
     labelColor: '#ffffff' #Hex Value
     labelFontWeight: 'Medium' #Bold, SemiBold, Medium or Regular
@@ -106,7 +123,7 @@ menu:
     name: 'Managers'
     icon: 'managerIcon'
     index: 0
-    labelPadding: 40 #Padding between label and buttons
+    labelPadding: 60 #Padding between label and buttons
     labelSize: 35
     labelColor: '#ffffff' #Hex Value
     labelFontWeight: 'Medium' #Bold, SemiBold, Medium or Regular
@@ -155,7 +172,7 @@ fonts:
   
 #Assets are looped in the GameScene and loaded from there.
 assets:
-  #Rebirth Assets
+  #Prestige Assets
   - name: "prestigeMenuButton"
     path: "assets/PrestigeMenu/prestigeMenuButton.png"
   - name: "prestigeIcon"
@@ -203,6 +220,8 @@ assets:
     path: "assets/Menu/inactiveMenuTab.png"
   - name: "activeMenuTab"
     path: "assets/Menu/activeMenuTab.png"
+  - name: "scrollIndicator"
+    path: "assets/Menu/scrollIndicator.png"
 
   - name: "shopIcon"
     path: "assets/Menu/shopIcon.png"

@@ -25,16 +25,20 @@ export class AddButton extends Button{
             fill: '#fff', 
             fontFamily: 'KodeMonoBold'
         }).setOrigin(0.5,0.5)
+
+        this.updateButtonContents()
     }
 
     onPointerUp(){
-        super.onPointerUp()
+        super.onPointerUp(true)
         const m = this.gameScene.moneyBackground
         if(!this.canUseButton()){
-            this.lastPopup = moneyPopup(this.gameScene,m.x+m.displayWidth/2,m.y-m.displayHeight,this.price,PopupType.NEUTRAL,this.lastPopup)
+            this.lastPopup = moneyPopup(this.gameScene,m.x+m.displayWidth/2,m.y-m.displayHeight,this.getPrice(),PopupType.NEUTRAL,this.lastPopup)
+            return;
         }
-        this.lastPopup = moneyPopup(this.gameScene,m.x+m.displayWidth/2,m.y-m.displayHeight,paid,PopupType.NEGATIVE,this.lastPopup)
+        this.lastPopup = moneyPopup(this.gameScene,m.x+m.displayWidth/2,m.y-m.displayHeight,this.getPrice(),PopupType.NEGATIVE,this.lastPopup)
         this.gameScene.money -= this.getPrice()
+        this.callBack()
         this.updateButtonContents()
     }
 
@@ -49,9 +53,11 @@ export class AddButton extends Button{
         const priceConfig = this.gameScene.config.priceConfig.shop
         const price = priceConfig.priceConstant * (priceConfig.priceFactor ** this.gameScene.shopList.length)
         return Math.round(price)
+        
     }
 
     updateButtonContents(){
+        super.updateButtonContents()
         this.buttonPriceText.text = `${this.getPrice()}kr`
         this.fitText(this.buttonPriceText,this.button.displayWidth)
     }
