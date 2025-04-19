@@ -1,143 +1,142 @@
-import { Menu } from "./Menu.js"
-import { ShopButton } from "../Buttons/ShopButton.js"
-import { AddButton } from "../Buttons/AddButton.js"
+import { Menu } from "./Menu.js";
+import { ShopButton } from "../Buttons/ShopButton.js";
+import { AddButton } from "../Buttons/AddButton.js";
 
-export class ManagerMenu extends Menu{
-    constructor(gameScene,menuWidth,iconSize){
-        super(gameScene,menuWidth,iconSize,gameScene.config.menu.managerMenu)
-
-        const sF = gameScene.scale.width/1920 //Scaling
-        const config = gameScene.config
+export class ManagerMenu extends Menu {
+    constructor(gameScene,iconSize){
+        super(gameScene,iconSize,gameScene.config.menu.managerMenu)
 
         this.managers = []
-        this.labelPadding = this.menuConfig.labelPadding*sF
-
-
-        gameScene.events.on('shopCreated',(shop)=>{
-
-
-            const x = gameScene.scale.width-menuWidth/2
-            const newShopConfig = config.shops[gameScene.shopList.length]
         
-            let label = gameScene.add.text(x,this.initialOffset,newShopConfig.name,{
-                fontSize: `${sF*this.menuConfig.labelSize}px`, 
-                fill: this.menuConfig.labelColor, 
-                fontFamily: `KodeMono${this.menuConfig.labelFontWeight}`,
-            }).setOrigin(0.5,0.5)
-
-            let labelHeight = label.displayHeight
-
-
-
-            let buttonConfig = config.shopConfig.menuButtons.managerUpgrade1
-            let speedButton = new ShopButton(gameScene,{
-                x:gameScene.scale.width-menuWidth/3*2,
-                y:400,
-                scale:config.shopConfig.menuButtons.upgradeButtonScale,
-                value:buttonConfig.defaultValue,
-                valueIncrement:buttonConfig.valueIncrement,
-                valueSuffix:buttonConfig.valueSuffix,
-                callBack:()=>{
-                    shop.managerSpeed += speedButton.valueIncrement
-                    return;
-                }
-            },buttonConfig.icon,shop)
-
-
-
-            let buttonHeight = speedButton.button.displayHeight
-
-            let y = (buttonHeight+this.contentPadding)*gameScene.shopList.length+this.initialOffset+(labelHeight+this.labelPadding)*this.managers.length
-            label.y = y-(labelHeight+this.labelPadding)
-
-            speedButton.updatePosition(null,y+this.contentPadding)
-
-            buttonConfig = config.shopConfig.menuButtons.managerUpgrade2
-            let multiplierButton = new ShopButton(gameScene,{
-                x:gameScene.scale.width-menuWidth/3,
-                y:y,
-                scale:config.shopConfig.menuButtons.upgradeButtonScale,
-                value:buttonConfig.defaultValue,
-                valueIncrement:buttonConfig.valueIncrement,
-                valueSuffix:buttonConfig.valueSuffix,
-                callBack:()=>{
-                    shop.managerMultiplier += multiplierButton.valueIncrement
-                    return;
-                }
-            },buttonConfig.icon,shop)
-
-
-            let button = new AddButton(gameScene,{
-                x:gameScene.scale.width-menuWidth/2,
-                y:y+this.contentPadding,
-                scale: 0.5,
-                callBack:()=>{
-                    shop.toggleManager(true)
-                    button.disableButton()
-                    this.toggleActive(this.active)
-                }
-            },`Køb manager`)
-
-            this.managers.push({
-                label: label,
-                speedButton: speedButton,
-                multiplierButton: multiplierButton,
-                managerBar: null,
-                addManagerButton: button,
-            })
-
-
+        gameScene.events.on("shopCreated", (shop) =>{
+            this.managers.push(this.addManagerUpgrades(shop))
+            this.updateContentPosition()
             this.toggleActive(this.active)
         })
 
         this.toggleActive(false)
     }
 
-    checkButtonLockState(){
-        super.checkButtonLockState()
-        this.managers.forEach((m)=>{
-            this.updateButtonLock(m.speedButton)
-            this.updateButtonLock(m.multiplierButton)
-            this.updateButtonLock(m.addManagerButton)
+    addManagerUpgrades(shop){
+        const sF = this.gameScene.scale.width/1920
+        const config = this.gameScene.config
+
+        const label = this.gameScene.add.text(0,0,config.shops[shop.shopNum].name,{
+            fontSize: `${sF*this.menuConfig.labelSize}px`, 
+            fill: this.menuConfig.labelColor, 
+            fontFamily: `KodeMono${this.menuConfig.labelFontWeight}`,
+        }).setOrigin(0.5,0)
+
+        const button1 = this.createShopButton(
+            config.shopConfig.menuButtons.managerUpgrade1,
+            shop,
+            () =>{ 
+                shop.managerSpeed += button1.valueIncrement
+            }
+        )
+
+        const button2 = this.createShopButton(
+            config.shopConfig.menuButtons.managerUpgrade2,
+            shop,
+            () =>{ 
+                shop.managerMultiplier += button2.valueIncrement
+            }
+        )
+
+        const button3 = new AddButton(this.gameScene,{
+            x:0,
+            y:0,
+            scale: config.shopConfig.menuButtons.upgradeButtonScale,
+            callBack: () => {
+                shop.toggleManager(true)
+                button3.disableButton()
+                this.toggleActive(this.active)
+            }
+        },"Køb manager")
+
+        return {
+            label: label,
+            button1: button1,
+            button2: button2,
+            addButton: button3
+        }
+    }
+
+    createShopButton(config,shop,callBack){
+        const button = new ShopButton(this.gameScene,{
+            x:0,
+            y:0,
+            value: config.defaultValue,
+            valueIncrement: config.valueIncrement,
+            valueSuffix: config.valueSuffix,
+            scale: this.gameScene.config.shopConfig.menuButtons.upgradeButtonScale,
+            callBack: callBack
+        },config.icon,shop)
+        console.log(button.scale)
+        return button;
+    }
+
+
+
+    getContentHeight(){
+        const heightPerManager = this.managers[0].label.displayHeight+this.managers[0].button2.button.displayHeight+this.contentPadding+this.labelPadding
+        let contentHeigt = heightPerManager * this.managers.length
+        return contentHeigt;
+    }
+
+    updateContentPosition(){
+        //if (!this.active) { return }
+        const x = this.gameScene.scale.width-this.iconSize*2
+        const heightPerManager = this.managers[0].label.displayHeight+this.managers[0].button2.button.displayHeight+this.contentPadding+this.labelPadding
+
+        for (let i = 0; i < this.managers.length; i++){
+            const m = this.managers[i]
+
+            const y = (heightPerManager * i) + this.scroll
+            const by = y + m.label.displayHeight + this.labelPadding
+
+            m.label.x = x
+            m.label.y = y
+
+            const xOffset = this.iconSize/1.5
+
+            m.button1.updatePosition(x-xOffset,by)
+            m.button2.updatePosition(x+xOffset,by)
+            m.addButton.updatePosition(x,by)
+
+        }
+    }
+
+    updateContents(){
+        this.managers.forEach((m) =>{
+            m.button1.updateButtonContents()
+            m.button2.updateButtonContents()
+            m.addButton.updateButtonContents()
         })
     }
 
-    updateButtonLock(button){
-        if (!button.buttonRequirements()){
-            button.lock(true)
-        }else if (button.button.texture.key === button.texture.greyButton){
-            button.lock(false)
-        }
-    }
-
-    toggleActive(active){
-        super.toggleActive(active)
-        if(active){
+    toggleActive(isActive){
+        super.toggleActive(isActive)
+        if(isActive){
             this.managers.forEach((m)=>{
                 m.label.setVisible(true)
-                if (m.addManagerButton.disabled){
-                    m.speedButton.toggleButton(true)
-                    m.multiplierButton.toggleButton(true)
+                if (m.addButton.disabled){
+                    m.button1.toggleButton(true)
+                    m.button2.toggleButton(true)
                 }else{
-                    m.speedButton.toggleButton(false)
-                    m.multiplierButton.toggleButton(false)
+                    m.button1.toggleButton(false)
+                    m.button2.toggleButton(false)
                 }
-                m.addManagerButton.toggleButton(true)
-
+                m.addButton.toggleButton(true)
             })
-
-
         }else{
             this.managers.forEach((m)=>{
                 m.label.setVisible(false)
-                m.speedButton.toggleButton(false)
-                m.multiplierButton.toggleButton(false)
-                m.addManagerButton.toggleButton(false)
-                //m.managerBar.toggleActive(false)
+                m.button1.toggleButton(false)
+                m.button2.toggleButton(false)
+                m.addButton.toggleButton(false)
             })
-
         }
 
     }
-    
 }

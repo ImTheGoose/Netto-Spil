@@ -34,7 +34,12 @@ export class PrestigeButton extends Button{
         this.title.setDepth(depth)
     }
 
-    buttonRequirements(){
-        return this.gameScene.prestigeMenu.isPrestigeRequirementsMet();
+    canUseButton(){
+        return this.gameScene.prestigeMenu.canPrestige();
+    }
+
+    onPointerUp(){
+        super.onPointerUp()
+        if(this.canUseButton()){ this.gameScene.prestigeMenu.completePrestige() }
     }
 }

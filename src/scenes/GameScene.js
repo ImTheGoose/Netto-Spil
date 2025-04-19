@@ -1,7 +1,7 @@
 import  { Shop } from './ShopClass.js';
-import { ShopMenu } from './Menus/newShopMenu.js';
-import { ManagerMenu } from './Menus/newManagerMenu.js';
-import { PrestigeMenuButton } from './Buttons/newPrestigeMenuButton.js';
+import { ShopMenu } from './Menus/ShopMenu.js';
+import { ManagerMenu } from './Menus/ManagerMenu.js';
+import { PrestigeMenuButton } from './Buttons/PrestigeMenuButton.js';
 import { PrestigeMenu } from './PrestigeMenu.js';
 
 export class GameScene extends Phaser.Scene {

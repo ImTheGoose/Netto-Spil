@@ -1,4 +1,4 @@
-import { PrestigeButton } from "./Buttons/newPrestigeButton.js";
+import { PrestigeButton } from "./Buttons/PrestigeButton.js";
 import { moneyPopup,PopupType } from "./Utils.js"
 
 export class PrestigeMenu {

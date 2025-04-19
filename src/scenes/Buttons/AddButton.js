@@ -4,7 +4,9 @@ import { moneyPopup,PopupType } from "../Utils.js";
 export class AddButton extends Button{
     constructor(gameScene, config,title){
         super(gameScene,config,gameScene.config.texture.addButton)
+
         const sF = gameScene.scale.width/1920*this.scale
+
         this.sound = gameScene.sound.add("purchaseSound")
 
         this.priceOffset = sF*30;
@@ -18,27 +20,46 @@ export class AddButton extends Button{
         }).setOrigin(0.5,0.5)
 
         //Creates price element for button.
-        this.buttonPriceText = gameScene.add.text(this.x,this.y+this.priceOffset,this.price+"Kr",{
+        this.buttonPriceText = gameScene.add.text(this.x,this.y+this.priceOffset,"loading...",{
             fontSize: `${sF*50}px`, 
             fill: '#fff', 
             fontFamily: 'KodeMonoBold'
         }).setOrigin(0.5,0.5)
-        this.fitText(this.buttonPriceText, this.button.displayWidth)
+
+        this.updateButtonContents()
     }
 
-
-    calculatePrice(){
-        let c = this.gameScene.config
-        let pC = c.priceConfig.shop
-
-        let price = pC.priceConstant * (pC.priceFactor ** this.gameScene.shopList.length)
-        price = Math.round(price)
-
-        return price;
+    onPointerUp(){
+        super.onPointerUp(true)
+        const m = this.gameScene.moneyBackground
+        if(!this.canUseButton()){
+            this.lastPopup = moneyPopup(this.gameScene,m.x+m.displayWidth/2,m.y-m.displayHeight,this.getPrice(),PopupType.NEUTRAL,this.lastPopup)
+            return;
+        }
+        this.lastPopup = moneyPopup(this.gameScene,m.x+m.displayWidth/2,m.y-m.displayHeight,this.getPrice(),PopupType.NEGATIVE,this.lastPopup)
+        this.gameScene.money -= this.getPrice()
+        this.callBack()
+        this.updateButtonContents()
     }
 
-    updateText(){
-        this.buttonPriceText.text = this.price+"kr"
+    canUseButton(){
+        if (this.gameScene.money < this.getPrice()) { 
+            return false; 
+        }
+        return true;
+    }
+
+    getPrice(){
+        const priceConfig = this.gameScene.config.priceConfig.shop
+        const price = priceConfig.priceConstant * (priceConfig.priceFactor ** this.gameScene.shopList.length)
+        return Math.round(price)
+        
+    }
+
+    updateButtonContents(){
+        super.updateButtonContents()
+        this.buttonPriceText.text = `${this.getPrice()}kr`
+        this.fitText(this.buttonPriceText,this.button.displayWidth)
     }
 
     //Resets position of button and contents
@@ -49,7 +70,6 @@ export class AddButton extends Button{
 
     }
 
-    //Repositions button and contents
     updatePosition(x,y){
         super.updatePosition(x,y)
         if (y){
@@ -62,22 +82,17 @@ export class AddButton extends Button{
         }
     }
 
-    //Offsets position of button and contents
     offsetButtonPosition(){
         super.offsetButtonPosition()
         this.buttonPriceText.y += this.accentOffset
         this.buttonTitleText.y += this.accentOffset
     }
 
-    //Toggles visibility of button and contents
-    toggleButton(active){
-        super.toggleButton(active)
-        if (active && !this.disabled){
-            this.buttonPriceText.setVisible(true)
-            this.buttonTitleText.setVisible(true)
-        }else{
-            this.buttonPriceText.setVisible(false)
-            this.buttonTitleText.setVisible(false)
-        }
+    toggleButton(isActive){
+        super.toggleButton(isActive)
+        if (this.disabled){ isActive = false }
+        this.buttonPriceText.setVisible(isActive)
+        this.buttonTitleText.setVisible(isActive)
     }
+
 }
