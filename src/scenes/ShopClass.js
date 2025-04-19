@@ -24,15 +24,14 @@ export class Shop {
 
         this.shopNum = shopNum
 
-        let sC = gameScene.config.shopConfig
-        console.log(sC)
-        this.amountOfPeople = sC.menuButtons.upgrade1.defaultValue
-        this.cashierSpeed = sC.menuButtons.upgrade2.defaultValue
-        this.pricePerPerson = sC.menuButtons.upgrade3.defaultValue
+        this.shopConfig = gameScene.config.shopConfig
+        this.amountOfPeople = this.shopConfig.menuButtons.upgrade1.defaultValue
+        this.cashierSpeed = this.shopConfig.menuButtons.upgrade2.defaultValue
+        this.pricePerPerson = this.shopConfig.menuButtons.upgrade3.defaultValue
 
         this.manager = true
         this.managerSpeed = 100;
-        this.managerMultiplier = 0;
+        this.managerMultiplier = 1;
         this.managerOffset = 45
         const managerHeight = size/8
         this.managerCooldown = 5000
@@ -79,7 +78,7 @@ export class Shop {
 
     managerCollect(){
         if (this.cooldownProgress >= this.cooldown){
-            this.collectMoney()
+            this.collectMoney(true)
             this.managerCooldownProgress = 0;
         }
         return;
@@ -128,6 +127,27 @@ export class Shop {
 
     }
 
+    updateShop(delta){
+        if (this.cooldownProgress < this.cooldown){
+            this.cooldownProgress += delta*(this.cashierSpeed/100);
+        }else if (this.pointerOn){
+            this.gameScene.input.setDefaultCursor('pointer');
+        }
+        const cropHeight = 1080 * this.cooldownProgress/this.cooldown;
+        this.progressSprite.setCrop(0,1080-cropHeight,1080,cropHeight)
+
+        if (this.manager){
+            if(this.managerCooldownProgress < this.managerCooldown){
+                this.managerCooldownProgress += delta*(this.managerSpeed/100)
+            }else if (this.managerCooldownProgress >= this.managerCooldown){
+                this.managerCollect()
+            }
+            const managerCropHeight = this.managerProgress.width * this.managerCooldownProgress/this.managerCooldown
+
+            this.managerProgress.setCrop(0,0,managerCropHeight,this.managerProgress.height)
+        }
+    }
+
 
 
     collectMoney(isManager){
@@ -136,7 +156,7 @@ export class Shop {
             m = this.managerMultiplier
         }
         this.cooldownProgress = 0;
-        let mon = this.amountOfPeople*this.pricePerPerson*m
+        let mon = this.amountOfPeople*this.pricePerPerson*m*this.gameScene.prestigeMenu.getMultiplier()
         mon = Math.round(mon)
         this.gameScene.money += mon
         this.gameScene.input.setDefaultCursor('auto');
@@ -144,5 +164,14 @@ export class Shop {
         this.sound.play({volume:1})
         this.lastPopup = moneyPopup(this.gameScene,this.x,this.y-this.greySprite.displayHeight/2,mon,PopupType.POSITIVE, this.lastPopup)
 
+    }
+
+    destroy(){
+        this.progressSprite.destroy()
+        this.greySprite.destroy()
+        this.managerGrey.destroy()
+        this.managerProgress.destroy()
+        this.sound.destroy()
+        console.log(`Successfully destroyed shop: ${this.shopNum}`)
     }
 }

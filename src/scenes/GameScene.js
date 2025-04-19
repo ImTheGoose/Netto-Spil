@@ -1,12 +1,14 @@
 import  { Shop } from './ShopClass.js';
-import { shopMenu,managerMenu } from "./MenuClass.js";
-import { prestigeMenuButton } from './ButtonClasses.js';
+import { ShopMenu } from './Menus/ShopMenu.js';
+import { ManagerMenu } from './Menus/ManagerMenu.js';
+import { PrestigeMenuButton } from './Buttons/PrestigeMenuButton.js';
+import { PrestigeMenu } from './PrestigeMenu.js';
 
 export class GameScene extends Phaser.Scene {
     constructor(){
         super({ key: "GameScene", active: false })
 
-        this.money = 0;
+        this.money = 9999999999999;
 
         this.shopList = []
     }
@@ -55,36 +57,24 @@ export class GameScene extends Phaser.Scene {
         const menuWidth = this.backgroundImage.displayWidth
         const iconSize = menuWidth/4;
 
-        this.shopMenu = new shopMenu(this,menuWidth,iconSize)
-        //this.marketingMenu = new marketingMenu(this,menuWidth,iconSize)
-        this.managerMenu = new managerMenu(this,menuWidth,iconSize)
-        //this.worldMenu = new worldMenu(this,menuWidth,iconSize)
+        this.shopMenu = new ShopMenu(this,iconSize)
+        this.managerMenu = new ManagerMenu(this,iconSize)
 
         this.activeMenu = this.shopMenu 
         //--- Menu segment end ---//
 
-        this.prestigeMenuButton = new prestigeMenuButton(this,{
+        this.prestigeMenuButton = new PrestigeMenuButton(this,{
             x: this.scale.width-menuWidth-100*sF,
             y: this.scale.height-100*sF,
-            price: 0,
-            priceMultiplier: 0,
             scale: 0.25,
             callBack:() => {}
         })
 
+        this.prestigeMenu = new PrestigeMenu(this)
+
 
         //Adds the starter shop.
-        const startShop = this.cache.json.get('config').shops[0]
-        const defShop = this.cache.json.get('config').shopConfig
-        this.shopList.push(new Shop(
-            this,
-            startShop.x*sF, 
-            startShop.y*sF, 
-            defShop.size, 
-            defShop.texture,1))
-        
-
-            
+        this.createDefaultShop()    
 
         this.registry.set('money', 0)
     }
@@ -98,38 +88,48 @@ export class GameScene extends Phaser.Scene {
         }
     }
 
-    update(time, delta) {
+    prestige(){
+        this.shopList.forEach((shop)=>{
+            shop.destroy()
+        })
+        this.shopList = []
+        this.shopMenu.resetMenu()
+        this.managerMenu.resetMenu()
+        this.managerMenu.toggleActive(false)
+        this.shopMenu.toggleActive(true)
+        this.activeMenu = this.shopMenu
+        this.createDefaultShop()
 
+        this.moneyText.setFontSize(100)
+    }
+
+    createDefaultShop(){
+        const startShop = this.cache.json.get('config').shops[0]
+        const defShop = this.cache.json.get('config').shopConfig
+        const sF = this.scale.width/1920
+        this.shopList.push(new Shop(
+            this,
+            startShop.x*sF, 
+            startShop.y*sF, 
+            defShop.size, 
+            defShop.texture,0))
+    }
+
+    update(time, delta) {
         this.moneyText.text = Math.round(this.money)+"kr"
         this.fitText(this.moneyText,this.moneyBackground.displayWidth*0.7)
 
         //Updates the progress of each shop
         this.shopList.forEach(shop => {
-            if (shop.cooldownProgress < shop.cooldown){
-                shop.cooldownProgress += delta*(shop.cashierSpeed/100);
-            }else if (shop.pointerOn){
-                this.input.setDefaultCursor('pointer');
-            }
-            const cropHeight = 1080 * shop.cooldownProgress/shop.cooldown;
-            shop.progressSprite.setCrop(0,1080-cropHeight,1080,cropHeight)
-
-            if (shop.manager){
-                if(shop.managerCooldownProgress < shop.managerCooldown){
-                    shop.managerCooldownProgress += delta*(shop.managerSpeed/100)
-                }else if (shop.managerCooldownProgress >= shop.managerCooldown){
-                    shop.managerCollect()
-                }
-                const managerCropHeight = shop.managerProgress.width * shop.managerCooldownProgress/shop.managerCooldown
-
-                shop.managerProgress.setCrop(0,0,managerCropHeight,shop.managerProgress.height)
-            }
-
+            shop.updateShop(delta)
         })
 
         //Checks for if buttons needs to be greyed out.
-        this.shopMenu.checkButtonLockState()
+        this.shopMenu.updateContents()
+        this.managerMenu.updateContents()
 
-        this.managerMenu.checkButtonLockState()
+        //this.managerMenu.checkButtonLockState()
+        this.prestigeMenu.updatePrestigeMenu()
 
     
     }
