@@ -127,6 +127,27 @@ export class Shop {
 
     }
 
+    updateShop(delta){
+        if (this.cooldownProgress < this.cooldown){
+            this.cooldownProgress += delta*(this.cashierSpeed/100);
+        }else if (this.pointerOn){
+            this.gameScene.input.setDefaultCursor('pointer');
+        }
+        const cropHeight = 1080 * this.cooldownProgress/this.cooldown;
+        this.progressSprite.setCrop(0,1080-cropHeight,1080,cropHeight)
+
+        if (this.manager){
+            if(this.managerCooldownProgress < this.managerCooldown){
+                this.managerCooldownProgress += delta*(this.managerSpeed/100)
+            }else if (this.managerCooldownProgress >= this.managerCooldown){
+                this.managerCollect()
+            }
+            const managerCropHeight = this.managerProgress.width * this.managerCooldownProgress/this.managerCooldown
+
+            this.managerProgress.setCrop(0,0,managerCropHeight,this.managerProgress.height)
+        }
+    }
+
 
 
     collectMoney(isManager){

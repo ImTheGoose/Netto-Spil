@@ -58,9 +58,7 @@ export class GameScene extends Phaser.Scene {
         const iconSize = menuWidth/4;
 
         this.shopMenu = new ShopMenu(this,iconSize)
-        //this.marketingMenu = new marketingMenu(this,menuWidth,iconSize)
         this.managerMenu = new ManagerMenu(this,iconSize)
-        //this.worldMenu = new worldMenu(this,menuWidth,iconSize)
 
         this.activeMenu = this.shopMenu 
         //--- Menu segment end ---//
@@ -76,10 +74,7 @@ export class GameScene extends Phaser.Scene {
 
 
         //Adds the starter shop.
-        this.createDefaultShop()
-        
-
-            
+        this.createDefaultShop()    
 
         this.registry.set('money', 0)
     }
@@ -87,7 +82,6 @@ export class GameScene extends Phaser.Scene {
 
     //Function for making text fit withing a area
     fitText(textObject, maxWidth){
-        textObject.setFontSize(100)
         while (textObject.displayWidth > maxWidth-this.fitTextPadding) {
             let currentSize = parseInt(textObject.style.fontSize, 10);
             textObject.setFontSize(currentSize - 1);
@@ -105,6 +99,8 @@ export class GameScene extends Phaser.Scene {
         this.shopMenu.toggleActive(true)
         this.activeMenu = this.shopMenu
         this.createDefaultShop()
+
+        this.moneyText.setFontSize(100)
     }
 
     createDefaultShop(){
@@ -120,31 +116,12 @@ export class GameScene extends Phaser.Scene {
     }
 
     update(time, delta) {
-
         this.moneyText.text = Math.round(this.money)+"kr"
         this.fitText(this.moneyText,this.moneyBackground.displayWidth*0.7)
 
         //Updates the progress of each shop
         this.shopList.forEach(shop => {
-            if (shop.cooldownProgress < shop.cooldown){
-                shop.cooldownProgress += delta*(shop.cashierSpeed/100);
-            }else if (shop.pointerOn){
-                this.input.setDefaultCursor('pointer');
-            }
-            const cropHeight = 1080 * shop.cooldownProgress/shop.cooldown;
-            shop.progressSprite.setCrop(0,1080-cropHeight,1080,cropHeight)
-
-            if (shop.manager){
-                if(shop.managerCooldownProgress < shop.managerCooldown){
-                    shop.managerCooldownProgress += delta*(shop.managerSpeed/100)
-                }else if (shop.managerCooldownProgress >= shop.managerCooldown){
-                    shop.managerCollect()
-                }
-                const managerCropHeight = shop.managerProgress.width * shop.managerCooldownProgress/shop.managerCooldown
-
-                shop.managerProgress.setCrop(0,0,managerCropHeight,shop.managerProgress.height)
-            }
-
+            shop.updateShop(delta)
         })
 
         //Checks for if buttons needs to be greyed out.
@@ -152,7 +129,6 @@ export class GameScene extends Phaser.Scene {
         this.managerMenu.updateContents()
 
         //this.managerMenu.checkButtonLockState()
-
         this.prestigeMenu.updatePrestigeMenu()
 
     
