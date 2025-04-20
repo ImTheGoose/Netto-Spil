@@ -1,6 +1,6 @@
 
 import { GameScene } from './scenes/GameScene.js';
-import { BootScene } from './scenes/bootScene.js';
+import { BootScene } from './scenes/BootScene.js';
 
 
 const config = {
