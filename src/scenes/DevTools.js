@@ -55,6 +55,7 @@ function loadDevTools(){
         window.gameScene.preventSave = true
         const currentPlayerData = JSON.parse(localStorage.getItem("playerData"))
         let archive = JSON.parse(localStorage.getItem("oldPlayerData"))
+        if (!archive) { archive = [] }
         archive.push(currentPlayerData)
         localStorage.setItem("oldPlayerData",JSON.stringify(archive))
         console.log("archived current player data at index: "+archive.length)
@@ -64,6 +65,7 @@ function loadDevTools(){
         window.gameScene.preventSave = true
         const currentPlayerData = JSON.parse(localStorage.getItem("playerData"))
         let archive = JSON.parse(localStorage.getItem("oldPlayerData"))
+        if (!archive) { archive = [] }
         archive.push(currentPlayerData)
         localStorage.setItem("oldPlayerData",JSON.stringify(archive))
         console.log("archived current player data at index: "+archive.length)
