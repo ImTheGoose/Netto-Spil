@@ -44,6 +44,7 @@ export class Menu {
         this.gameScene.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
             if(pointer.x < this.gameScene.scale.width-this.iconSize*4 || pointer.y < this.iconSize || !this.active){ return }
             this.updateScroll(deltaY)
+
         });
 
         //On Hover

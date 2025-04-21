@@ -9,7 +9,8 @@ export class GameScene extends Phaser.Scene {
         super({ key: "GameScene", active: false })
         window.gameScene = this
 
-        this.money = 9999999999999;
+        this.money = 0;
+        this.preventSave = false
 
         this.saveCooldown = 1000*120;
         this.saveCooldownProgress = 0;
@@ -38,110 +39,6 @@ export class GameScene extends Phaser.Scene {
     }
 
 
-    loadPlayerData(playerData){
-        console.log(`Loading player data...`)
-        if (!playerData) {
-            console.log(`Playerdata was invalid: ${playerData}`)
-            this.createPlayerData()
-            return;
-        }
-
-        if(playerData.gameVersion < this.config.gameVersion){ 
-            this.updatePlayerData(playerData)
-            return;
-        }
-
-        playerData.shopData.forEach((shop) =>{
-            const newShop = new Shop(
-                this,
-                shop.x,
-                shop.y,
-                shop.size,
-                shop.texture,
-                shop.shopNum
-            )
-            this.shopList.push(newShop)
-
-            newShop.amountOfPeople = shop.amountOfPeople
-            newShop.cashierSpeed = shop.cashierSpeed
-            newShop.pricePerPerson = shop.pricePerPerson
-            newShop.managerSpeed = shop.managerSpeed
-            newShop.managerMultiplier = shop.managerMultiplier
-            newShop.toggleManager(shop.manager)
-        })
-
-        this.prestigeMenu.currentPrestigeNumber = playerData.prestigeNumber
-        this.money = playerData.money
-
-        console.log("Successfully loaded player.")
-    }
-
-    updatePlayerData(playerData){
-        console.log(`Updating playerdata from Version ${playerData.gameVersion} to Version ${this.config.gameVersion}`)
-        
-        this.archivePlayerData(playerData)
-        playerData.gameVersion = this.config.gameVersion
-        this.loadPlayerData(playerData)
-        console.log("Playerdata successfully updated to version "+playerData.gameVersion)
-    }
-
-    archivePlayerData(playerData){
-        console.log("archiving previous playerData")
-        let oldPlayerData = JSON.parse(localStorage.getItem("oldPlayerData"))
-        if (!oldPlayerData) {
-            oldPlayerData = []
-        }
-
-        oldPlayerData.push(playerData)
-        localStorage.setItem("oldPlayerData", JSON.stringify(oldPlayerData))
-        console.log("successfully archived previous playerData")
-    }
-
-    createPlayerData(){
-        console.log(`Creating new player data..`)
-        this.playerData = {
-            gameVersion: this.config.gameVersion,
-            money: 0,
-            prestigeNumber: 0,
-            shopData: [],
-        }
-
-        this.createDefaultShop()
-
-        console.log(`Successfully created playerData`)
-        this.savePlayerData(this.playerData)
-    }
-
-    savePlayerData(playerData){
-        console.log(`Saving player data...`)
-        if (!playerData) { playerData = this.playerData }
-        const sF = this.scale.width/1920
-
-        playerData.shopData = []
-        this.shopList.forEach((shop)=>{
-            playerData.shopData.push({
-                shopNum: shop.shopNum,
-                x: shop.x,
-                y: shop.y,
-                size: shop.size,
-                texture: shop.texture,
-                amountOfPeople: shop.amountOfPeople,
-                cashierSpeed: shop.cashierSpeed,
-                pricePerPerson: shop.pricePerPerson,
-                manager: shop.manager,
-                managerSpeed: shop.managerSpeed,
-                managerMultiplier: shop.managerMultiplier
-            })
-        })
-
-        playerData.money = this.money
-        playerData.prestigeNumber = this.prestigeMenu.currentPrestigeNumber
-
-
-
-        localStorage.setItem(`playerData`,JSON.stringify(playerData))
-        console.log(`Successfully saved playerData`)
-    }
     
     create() {
         const sF = this.scale.width/1920 //Used for scaling. 
@@ -253,4 +150,116 @@ export class GameScene extends Phaser.Scene {
 
     
     }
+
+
+
+    loadPlayerData(playerData){
+        console.log(`Loading player data...`)
+        if (!playerData) {
+            console.log(`Playerdata was invalid: ${playerData}`)
+            this.createPlayerData()
+            return;
+        }
+
+        if(playerData.gameVersion < this.config.gameVersion){ 
+            this.updatePlayerData(playerData)
+            return;
+        }
+
+        playerData.shopData.forEach((shop) =>{
+            const newShop = new Shop(
+                this,
+                shop.x,
+                shop.y,
+                shop.size,
+                shop.texture,
+                shop.shopNum
+            )
+            this.shopList.push(newShop)
+
+            newShop.amountOfPeople = shop.amountOfPeople
+            newShop.cashierSpeed = shop.cashierSpeed
+            newShop.pricePerPerson = shop.pricePerPerson
+            newShop.managerSpeed = shop.managerSpeed
+            newShop.managerMultiplier = shop.managerMultiplier
+            newShop.toggleManager(shop.manager)
+        })
+
+        this.prestigeMenu.currentPrestigeNumber = playerData.prestigeNumber
+        this.money = playerData.money
+
+        console.log("Successfully loaded player.")
+    }
+
+    updatePlayerData(playerData){
+        console.log(`Updating playerdata from Version ${playerData.gameVersion} to Version ${this.config.gameVersion}`)
+        
+        this.archivePlayerData(playerData)
+        playerData.gameVersion = this.config.gameVersion
+        this.loadPlayerData(playerData)
+        console.log("Playerdata successfully updated to version "+playerData.gameVersion)
+    }
+
+    archivePlayerData(playerData){
+        console.log("archiving previous playerData")
+        let oldPlayerData = JSON.parse(localStorage.getItem("oldPlayerData"))
+        if (!oldPlayerData) {
+            oldPlayerData = []
+        }
+
+        oldPlayerData.push(playerData)
+        localStorage.setItem("oldPlayerData", JSON.stringify(oldPlayerData))
+        console.log("successfully archived previous playerData")
+    }
+
+    createPlayerData(){
+        console.log(`Creating new player data..`)
+        this.playerData = {
+            gameVersion: this.config.gameVersion,
+            money: 0,
+            prestigeNumber: 0,
+            shopData: [],
+        }
+
+        this.createDefaultShop()
+
+        console.log(`Successfully created playerData`)
+        this.savePlayerData(this.playerData)
+    }
+
+    savePlayerData(playerData){
+        if (this.preventSave) {return}
+        console.log(`Saving player data...`)
+        if (!playerData) { playerData = this.playerData }
+        const sF = this.scale.width/1920
+
+        playerData.shopData = []
+        this.shopList.forEach((shop)=>{
+            playerData.shopData.push({
+                shopNum: shop.shopNum,
+                x: shop.x,
+                y: shop.y,
+                size: shop.size,
+                texture: shop.texture,
+                amountOfPeople: shop.amountOfPeople,
+                cashierSpeed: shop.cashierSpeed,
+                pricePerPerson: shop.pricePerPerson,
+                manager: shop.manager,
+                managerSpeed: shop.managerSpeed,
+                managerMultiplier: shop.managerMultiplier
+            })
+        })
+
+        playerData.money = this.money
+        playerData.prestigeNumber = this.prestigeMenu.currentPrestigeNumber
+
+
+        localStorage.setItem(`playerData`,JSON.stringify(playerData))
+        console.log(`Successfully saved playerData`)
+    }
+
+
 }
+window.addEventListener("beforeunload",(event)=>{
+    window.gameScene.savePlayerData()
+})

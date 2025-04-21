@@ -7,6 +7,7 @@ export class ManagerMenu extends Menu {
         super(gameScene,iconSize,gameScene.config.menu.managerMenu)
 
         this.managers = []
+
         
         gameScene.events.on("shopCreated", (shop) =>{
             this.managers.push(this.addManagerUpgrades(shop))

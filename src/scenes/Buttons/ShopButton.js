@@ -41,7 +41,7 @@ export class ShopButton extends Button{
     }
 
     onPointerUp(){
-        super.onPointerUp()
+        super.onPointerUp(!this.canUseButton())
         const m = this.gameScene.moneyBackground
         if(!this.canUseButton()){
             this.lastPopup = moneyPopup(this.gameScene,m.x+m.displayWidth/2,m.y-m.displayHeight,this.getPrice(),PopupType.NEUTRAL,this.lastPopup)
