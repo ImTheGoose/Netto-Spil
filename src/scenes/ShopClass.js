@@ -1,16 +1,4 @@
 import { moneyPopup,PopupType } from "./Utils.js";
-
-export class NettoClass {
-    constructor(image, imageGray){
-        this.colorImage = image;
-        this.grayImage = imageGray;
-
-        this.cooldownProgress = 0;
-        this.cooldown = 2500;
-        this.collectMoney = 100;
-    }
-}
-
 export class Shop {
     constructor(gameScene,x,y,size,texture,shopNum){
         const sF = gameScene.scale.width/1920
@@ -74,6 +62,7 @@ export class Shop {
         })
 
         this.toggleManager(false)
+        console.log(`Successfully added shop: ${this.shopNum}`)
     }
 
     managerCollect(){
@@ -107,7 +96,7 @@ export class Shop {
             duration: 1200,
             ease: "Bounce.Out"
         })
-        console.log("enabled manager")
+        console.log(`Enabled manager for shop: ${this.shopNum}`)
         return;
     }
 
@@ -120,8 +109,7 @@ export class Shop {
             displayHeight: sF*this.size,
             alpha: {from: 0.5, to:1},
             duration: 800,
-            ease: "Bounce.Out",
-            onComplete: ()=>{        console.log(this.greySprite.displayWidth)}
+            ease: "Bounce.Out"
         })
         
 
@@ -160,7 +148,6 @@ export class Shop {
         mon = Math.round(mon)
         this.gameScene.money += mon
         this.gameScene.input.setDefaultCursor('auto');
-        console.log("Indsamlede "+mon+"kr fra nettoen")
         this.sound.play({volume:1})
         this.lastPopup = moneyPopup(this.gameScene,this.x,this.y-this.greySprite.displayHeight/2,mon,PopupType.POSITIVE, this.lastPopup)
 

@@ -20,7 +20,6 @@ export function moneyPopup(gameScene,x,y,amount,type,prevousPopup){
     }
 
     let config = gameScene.config.popupConfig
-    console.log(config)
     let size = config.size;
 
     let style = config.neutral

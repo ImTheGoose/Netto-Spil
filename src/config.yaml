@@ -1,3 +1,7 @@
+gameVersion: 0.4
+
+
+
 priceConfig:
   growthFactor: 1.25 #Prices for upgrades are calculated as Price(upNum)=growthIncrement*growthFactor^upNum
   incrementFactor: 1.5 #growthIncrement is calculated as grInc(shopNum)=incrementConstant*incrementFactor^shopNum
@@ -88,20 +92,33 @@ shops:
     y: 550
 
   - name: "Butik 4 (Skagen)"
-    x: 550
-    y: 100
-
-  - name: "Butik 5 (din mor)"
-    x: 300
-    y: 900
-
-  - name: "Butik 6 (din far)"
     x: 600
-    y: 700
-
-  - name: "Butik 7 (Skåne)"
-    x: 1200
     y: 100
+
+  - name: "Butik 5 (Esbjerg)"
+    x: 260
+    y: 750
+
+  - name: "Butik 6 (Holsterbro)"
+    x: 300
+    y: 450
+
+  - name: "Butik 7 (Lålland)"
+    x: 800
+    y: 970
+
+  - name: "Butik 8 (Malmö)"
+    x: 1150
+    y: 720
+
+  - name: "Butik 9 (Göteborg)"
+    x: 1000
+    y: 130
+
+  - name: "Butik 10 (Halmstad)"
+    x: 1070
+    y: 320
+
 
 
 

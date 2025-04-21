@@ -5,7 +5,7 @@ import { BootScene } from './scenes/BootScene.js';
 
 const config = {
     type: Phaser.WEBGL,
-    title: 'Overlord Rising',
+    title: 'Netto Game',
     description: '',
     parent: 'game-container',
     width: 3840,

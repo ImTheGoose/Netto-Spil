@@ -2,13 +2,14 @@ import { Button } from "./Button.js"
 import { moneyPopup,PopupType } from "../Utils.js";
 
 export class ShopButton extends Button{
-    constructor(gameScene, config,icon,assignedShop){
+    constructor(gameScene, config,icon,assignedShop,getValue){
         super(gameScene,config,gameScene.config.texture.shopButton)
         this.assignedShop = assignedShop
         this.value = config.value
         this.valueIncrement = config.valueIncrement
         this.valueSuffix = config.valueSuffix
         this.timesBought = 0;
+        this.getValue = getValue
 
         const sF = gameScene.scale.width/1920*this.scale
         this.priceOffset = sF*60;
@@ -40,7 +41,7 @@ export class ShopButton extends Button{
     }
 
     onPointerUp(){
-        super.onPointerUp()
+        super.onPointerUp(!this.canUseButton())
         const m = this.gameScene.moneyBackground
         if(!this.canUseButton()){
             this.lastPopup = moneyPopup(this.gameScene,m.x+m.displayWidth/2,m.y-m.displayHeight,this.getPrice(),PopupType.NEUTRAL,this.lastPopup)
@@ -69,6 +70,7 @@ export class ShopButton extends Button{
 
     updateButtonContents(){
         super.updateButtonContents()
+        this.value = this.getValue()
         this.buttonPriceText.text = `${this.getPrice()}kr`
         this.fitText(this.buttonPriceText,this.button.displayWidth)
 
