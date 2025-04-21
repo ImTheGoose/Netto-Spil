@@ -124,7 +124,6 @@ export class ShopMenu extends Menu{
             scale: this.gameScene.config.shopConfig.menuButtons.upgradeButtonScale,
             callBack: callBack
         },config.icon,shop)
-        console.log(button.scale)
         return button;
     }
 
