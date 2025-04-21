@@ -27,6 +27,66 @@ export class GameScene extends Phaser.Scene {
         this.config.sounds.forEach((sound)=>{
             this.load.audio(sound.name,sound.path)
         })
+
+        const playerData = JSON.parse(localStorage.getItem("playerData"))
+        console.log(playerData)
+        this.loadPlayerData(playerData)
+    }
+
+
+    loadPlayerData(playerData){
+        console.log(`Loading player data...`)
+        if (!playerData) {
+            console.log(`Playerdata was invalid: ${playerData}`)
+            this.createPlayerData()
+            return;
+        }
+
+        if(playerData.gameVersion < this.config.gameVersion){ 
+            this.updatePlayerData(playerData)
+            return;
+        }
+        console.log("Successfully loaded player.")
+    }
+
+    updatePlayerData(playerData){
+        console.log(`Updating playerdata from Version ${playerData.gameVersion} to Version ${this.config.gameVersion}`)
+        
+        this.archivePlayerData(playerData)
+
+    }
+
+    archivePlayerData(playerData){
+        console.log("archiving previous playerData")
+        let oldPlayerData = JSON.parse(localStorage.getItem("oldPlayerData"))
+        if (!oldPlayerData) {
+            oldPlayerData = []
+        }
+
+        oldPlayerData.push(playerData)
+        localStorage.setItem("oldPlayerData", JSON.stringify(oldPlayerData))
+        console.log("successfully archived previous playerData")
+    }
+
+    createPlayerData(){
+        console.log(`Creating new player data..`)
+        this.playerData = {
+            gameVersion: this.config.gameVersion,
+            money: 0,
+            rebirthNumber: 0,
+            shopData: [],
+            managerData: [],
+        }
+
+        console.log(`Successfully created playerData`)
+        this.savePlayerData(this.playerData)
+    }
+
+    savePlayerData(playerData){
+        console.log(`Saving player data...`)
+        if (!playerData) { playerData = this.playerData }
+        localStorage.setItem(`playerData`,JSON.stringify(playerData))
+        console.log(`Successfully saved playerData`)
     }
     
     create() {

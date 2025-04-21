@@ -1,3 +1,8 @@
+gameVersion: 0.3
+
+
+
+
 priceConfig:
   growthFactor: 1.25 #Prices for upgrades are calculated as Price(upNum)=growthIncrement*growthFactor^upNum
   incrementFactor: 1.5 #growthIncrement is calculated as grInc(shopNum)=incrementConstant*incrementFactor^shopNum
