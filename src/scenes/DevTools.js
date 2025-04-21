@@ -21,6 +21,7 @@ function unloadDevTools(){
     window.loadOldPlayerData = null
     window.setPrestige = null
     window.setMoney = null
+    window.archiveCurrentSave = null
 }
 
 function loadDevTools(){
@@ -48,6 +49,15 @@ function loadDevTools(){
     window.setPrestige = function(amount){
         window.gameScene.prestigeMenu.currentPrestigeNumber = amount
         console.log(`Player prestige has been set to ${amount}`)
+    }
+
+    window.archiveCurrentSave = function(){
+        window.gameScene.preventSave = true
+        const currentPlayerData = JSON.parse(localStorage.getItem("playerData"))
+        let archive = JSON.parse(localStorage.getItem("oldPlayerData"))
+        archive.push(currentPlayerData)
+        localStorage.setItem("oldPlayerData",JSON.stringify(archive))
+        console.log("archived current player data at index: "+archive.length)
     }
     
     window.loadOldPlayerData = function(index){
