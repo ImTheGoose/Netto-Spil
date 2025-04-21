@@ -1,16 +1,4 @@
 import { moneyPopup,PopupType } from "./Utils.js";
-
-export class NettoClass {
-    constructor(image, imageGray){
-        this.colorImage = image;
-        this.grayImage = imageGray;
-
-        this.cooldownProgress = 0;
-        this.cooldown = 2500;
-        this.collectMoney = 100;
-    }
-}
-
 export class Shop {
     constructor(gameScene,x,y,size,texture,shopNum){
         const sF = gameScene.scale.width/1920
@@ -160,7 +148,6 @@ export class Shop {
         mon = Math.round(mon)
         this.gameScene.money += mon
         this.gameScene.input.setDefaultCursor('auto');
-        console.log(`Collected ${mon} kr from shop: ${this.shopNum}`)
         this.sound.play({volume:1})
         this.lastPopup = moneyPopup(this.gameScene,this.x,this.y-this.greySprite.displayHeight/2,mon,PopupType.POSITIVE, this.lastPopup)
 

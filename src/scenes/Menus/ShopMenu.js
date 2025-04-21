@@ -32,7 +32,7 @@ export class ShopMenu extends Menu{
                     this.addButton.toggleButton(false)
                 }
              }
-        },"Køb ny Butik",0)
+        },"Køb ny Butik",0,()=>{return false;})
 
         gameScene.events.on("shopCreated", (shop) =>{
             this.shops.push(this.addShopUpgrades(shop))
@@ -85,7 +85,10 @@ export class ShopMenu extends Menu{
             config.shopConfig.menuButtons.upgrade1,
             shop,
             () =>{
-                shop.amountOfPeople += button1.valueIncrement
+                shop.amountOfPeople = Math.round(shop.amountOfPeople + button1.valueIncrement)
+            },
+            ()=>{
+                return shop.amountOfPeople;
             }
         )
 
@@ -93,7 +96,10 @@ export class ShopMenu extends Menu{
             config.shopConfig.menuButtons.upgrade2,
             shop,
             () =>{
-                shop.cashierSpeed += button2.valueIncrement
+                shop.cashierSpeed = Math.round(shop.cashierSpeed + button2.valueIncrement)
+            },
+            ()=>{
+                return shop.cashierSpeed;
             }
         )
 
@@ -101,7 +107,10 @@ export class ShopMenu extends Menu{
             config.shopConfig.menuButtons.upgrade3,
             shop,
             () =>{
-                shop.pricePerPerson += button3.valueIncrement
+                shop.pricePerPerson = Math.round(shop.pricePerPerson + button3.valueIncrement)
+            },
+            ()=>{
+                return shop.pricePerPerson;
             }
         )
 
@@ -114,7 +123,7 @@ export class ShopMenu extends Menu{
         
     }
 
-    createShopButton(config,shop,callBack){
+    createShopButton(config,shop,callBack,getValue){
         const button = new ShopButton(this.gameScene,{
             x:0,
             y:0,
@@ -123,7 +132,7 @@ export class ShopMenu extends Menu{
             valueSuffix: config.valueSuffix,
             scale: this.gameScene.config.shopConfig.menuButtons.upgradeButtonScale,
             callBack: callBack
-        },config.icon,shop)
+        },config.icon,shop,getValue)
         return button;
     }
 

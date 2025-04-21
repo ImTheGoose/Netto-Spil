@@ -7,8 +7,12 @@ import { PrestigeMenu } from './PrestigeMenu.js';
 export class GameScene extends Phaser.Scene {
     constructor(){
         super({ key: "GameScene", active: false })
+        window.gameScene = this
 
         this.money = 9999999999999;
+
+        this.saveCooldown = 1000*120;
+        this.saveCooldownProgress = 0;
 
         this.shopList = []
     }
@@ -28,9 +32,9 @@ export class GameScene extends Phaser.Scene {
             this.load.audio(sound.name,sound.path)
         })
 
-        const playerData = JSON.parse(localStorage.getItem("playerData"))
-        console.log(playerData)
-        this.loadPlayerData(playerData)
+        this.playerData = JSON.parse(localStorage.getItem("playerData"))
+        console.log(this.playerData)
+
     }
 
 
@@ -46,6 +50,29 @@ export class GameScene extends Phaser.Scene {
             this.updatePlayerData(playerData)
             return;
         }
+
+        playerData.shopData.forEach((shop) =>{
+            const newShop = new Shop(
+                this,
+                shop.x,
+                shop.y,
+                shop.size,
+                shop.texture,
+                shop.shopNum
+            )
+            this.shopList.push(newShop)
+
+            newShop.amountOfPeople = shop.amountOfPeople
+            newShop.cashierSpeed = shop.cashierSpeed
+            newShop.pricePerPerson = shop.pricePerPerson
+            newShop.managerSpeed = shop.managerSpeed
+            newShop.managerMultiplier = shop.managerMultiplier
+            newShop.toggleManager(shop.manager)
+        })
+
+        this.prestigeMenu.currentPrestigeNumber = playerData.prestigeNumber
+        this.money = playerData.money
+
         console.log("Successfully loaded player.")
     }
 
@@ -53,7 +80,9 @@ export class GameScene extends Phaser.Scene {
         console.log(`Updating playerdata from Version ${playerData.gameVersion} to Version ${this.config.gameVersion}`)
         
         this.archivePlayerData(playerData)
-
+        playerData.gameVersion = this.config.gameVersion
+        this.loadPlayerData(playerData)
+        console.log("Playerdata successfully updated to version "+playerData.gameVersion)
     }
 
     archivePlayerData(playerData){
@@ -73,10 +102,11 @@ export class GameScene extends Phaser.Scene {
         this.playerData = {
             gameVersion: this.config.gameVersion,
             money: 0,
-            rebirthNumber: 0,
+            prestigeNumber: 0,
             shopData: [],
-            managerData: [],
         }
+
+        this.createDefaultShop()
 
         console.log(`Successfully created playerData`)
         this.savePlayerData(this.playerData)
@@ -85,6 +115,30 @@ export class GameScene extends Phaser.Scene {
     savePlayerData(playerData){
         console.log(`Saving player data...`)
         if (!playerData) { playerData = this.playerData }
+        const sF = this.scale.width/1920
+
+        playerData.shopData = []
+        this.shopList.forEach((shop)=>{
+            playerData.shopData.push({
+                shopNum: shop.shopNum,
+                x: shop.x,
+                y: shop.y,
+                size: shop.size,
+                texture: shop.texture,
+                amountOfPeople: shop.amountOfPeople,
+                cashierSpeed: shop.cashierSpeed,
+                pricePerPerson: shop.pricePerPerson,
+                manager: shop.manager,
+                managerSpeed: shop.managerSpeed,
+                managerMultiplier: shop.managerMultiplier
+            })
+        })
+
+        playerData.money = this.money
+        playerData.prestigeNumber = this.prestigeMenu.currentPrestigeNumber
+
+
+
         localStorage.setItem(`playerData`,JSON.stringify(playerData))
         console.log(`Successfully saved playerData`)
     }
@@ -134,9 +188,7 @@ export class GameScene extends Phaser.Scene {
 
 
         //Adds the starter shop.
-        this.createDefaultShop()    
-
-        this.registry.set('money', 0)
+        this.loadPlayerData(this.playerData)
     }
 
 
@@ -190,6 +242,14 @@ export class GameScene extends Phaser.Scene {
 
         //this.managerMenu.checkButtonLockState()
         this.prestigeMenu.updatePrestigeMenu()
+
+
+        if (this.saveCooldownProgress >= this.saveCooldown){
+            this.savePlayerData()
+            this.saveCooldownProgress = 0
+        }else{
+            this.saveCooldownProgress += delta
+        }
 
     
     }

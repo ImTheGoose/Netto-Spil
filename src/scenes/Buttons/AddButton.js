@@ -2,9 +2,10 @@ import { Button } from "./Button.js";
 import { moneyPopup,PopupType } from "../Utils.js";
 
 export class AddButton extends Button{
-    constructor(gameScene, config,title,shopNum){
+    constructor(gameScene, config,title,shopNum,getValueState){
         super(gameScene,config,gameScene.config.texture.addButton)
         this.shopNum = shopNum
+        this.getValueState = getValueState
 
         const sF = gameScene.scale.width/1920*this.scale
 
@@ -27,7 +28,7 @@ export class AddButton extends Button{
             fontFamily: 'KodeMonoBold'
         }).setOrigin(0.5,0.5)
 
-        this.updateButtonContents()
+
     }
 
     destroy(){
@@ -68,6 +69,11 @@ export class AddButton extends Button{
         super.updateButtonContents()
         this.buttonPriceText.text = `${this.getPrice()}kr`
         this.fitText(this.buttonPriceText,this.button.displayWidth)
+
+        if(this.getValueState()) {
+            this.getValueState = () => {return false;}
+            this.callBack()
+        }
     }
 
     //Resets position of button and contents

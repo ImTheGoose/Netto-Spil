@@ -31,7 +31,10 @@ export class ManagerMenu extends Menu {
             config.shopConfig.menuButtons.managerUpgrade1,
             shop,
             () =>{ 
-                shop.managerSpeed += button1.valueIncrement
+                shop.managerSpeed = Math.round(shop.managerSpeed + button1.valueIncrement)
+            },
+            () =>{
+                return shop.managerSpeed;
             }
         )
 
@@ -39,7 +42,10 @@ export class ManagerMenu extends Menu {
             config.shopConfig.menuButtons.managerUpgrade2,
             shop,
             () =>{ 
-                shop.managerMultiplier += button2.valueIncrement
+                shop.managerMultiplier = Math.round((shop.managerMultiplier + button2.valueIncrement)*100)/100
+            },
+            () =>{
+                return shop.managerMultiplier;
             }
         )
 
@@ -52,7 +58,9 @@ export class ManagerMenu extends Menu {
                 button3.disableButton()
                 this.toggleActive(this.active)
             }
-        },"Køb manager",shop.shopNum)
+        },"Køb manager",shop.shopNum, ()=>{
+            return shop.manager;
+        })
 
         return {
             label: label,
@@ -62,7 +70,7 @@ export class ManagerMenu extends Menu {
         }
     }
 
-    createShopButton(config,shop,callBack){
+    createShopButton(config,shop,callBack,getValue){
         const button = new ShopButton(this.gameScene,{
             x:0,
             y:0,
@@ -71,7 +79,7 @@ export class ManagerMenu extends Menu {
             valueSuffix: config.valueSuffix,
             scale: this.gameScene.config.shopConfig.menuButtons.upgradeButtonScale,
             callBack: callBack
-        },config.icon,shop)
+        },config.icon,shop,getValue)
         return button;
     }
 
